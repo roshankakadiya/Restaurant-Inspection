@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         restaurantManager = RestaurantManager.getInstance(this);
+        for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {
+            Log.d("Restaurant", restaurantManager.get(x).toString());
+        }
     }
 
 

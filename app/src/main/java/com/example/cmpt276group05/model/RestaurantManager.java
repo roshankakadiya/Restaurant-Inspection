@@ -48,20 +48,18 @@ public class RestaurantManager implements Iterable<Restaurant>{
             readRestaurantData();
         }
         sort();
-        for (int x = 0; x < instance.getNumRestaurant(); x++) {
-            Log.d("Restaurant", instance.get(x).toString());
-        }
+
         return instance;
     }
 
 
 
-    public void add(Restaurant restaurant) {
-        restaurantSamples.add(restaurant);
-    }
-
     private static void sort() {
 
+    }
+
+    public void add(Restaurant restaurant) {
+        restaurantSamples.add(restaurant);
     }
 
     public Restaurant get(int index) {
@@ -76,74 +74,34 @@ public class RestaurantManager implements Iterable<Restaurant>{
         restaurantSamples.remove(index);
     }
 
-//    private static void readRestaurantData() {
-//        InputStream is = ctx.getResources().openRawResource(R.raw.restaurants_itr1);
-//        BufferedReader reader = new BufferedReader(
-//                new InputStreamReader(is, StandardCharsets.UTF_8)
-//        );
-//        CSVReader csvReader = new CSVReader(reader);
-//
-//        String line = "";
-//
-//        try {
-//            // Skip over header
-//            csvReader.readNext();
-//
-//            while ((line = reader.readLine()) != null) {
-//                String[] tokens = line.split(",");
-//
-//                Restaurant sample = new Restaurant();
-//                sample.setTrackingNumber(tokens[0]);
-//                sample.setName(tokens[1]);
-//                sample.setAddress(tokens[2]);
-//                sample.setCity(tokens[3]);
-//                sample.setFacilityType(tokens[4]);
-//                sample.setLatitude(Double.parseDouble(tokens[5]));
-//                sample.setLongitude(Double.parseDouble(tokens[6]));
-//
-//                restaurantSamples.add(sample);
-//
-//                Log.d("Myactivity", "Just Created: " + sample);
-//            }
-//        } catch (IOException | CsvValidationException e) {
-//            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-
-
-
     private static void readRestaurantData() {
         InputStream is = context.getResources().openRawResource(R.raw.restaurants_itr1);
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, StandardCharsets.UTF_8)
         );
+        CSVReader csvReader = new CSVReader(reader);
 
-        String line = "";
+        String line[] = new String[7];
 
         try {
             // Skip over header
-            reader.readLine();
+            csvReader.readNext();
 
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(",");
-
+            while ((line = csvReader.readNext()) != null) {
                 Restaurant sample = new Restaurant();
-                sample.setTrackingNumber(tokens[0]);
-                sample.setName(tokens[1]);
-                sample.setAddress(tokens[2]);
-                sample.setCity(tokens[3]);
-                sample.setFacilityType(tokens[4]);
-                sample.setLatitude(Double.parseDouble(tokens[5]));
-                sample.setLongitude(Double.parseDouble(tokens[6]));
+                sample.setTrackingNumber(line[0]);
+                sample.setName(line[1]);
+                sample.setAddress(line[2]);
+                sample.setCity(line[3]);
+                sample.setFacilityType(line[4]);
+                sample.setLatitude(Double.parseDouble(line[5]));
+                sample.setLongitude(Double.parseDouble(line[6]));
 
                 restaurantSamples.add(sample);
 
                 Log.d("Myactivity", "Just Created: " + sample);
             }
-        } catch (IOException e) {
+        } catch (IOException | CsvValidationException e) {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);
             e.printStackTrace();
         }
