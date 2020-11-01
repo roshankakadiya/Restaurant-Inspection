@@ -4,8 +4,11 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.TextureView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.adapter.ViolationAdapter;
@@ -26,6 +29,7 @@ public class DetailInspectionActivity extends BaseActivity{
     private ListView lvViolations;
     private SimpleDateFormat sfd = new SimpleDateFormat ("MMM dd,yyyy", Locale.UK);
     private ViolationAdapter violationAdapter;
+    private List<ViolationEntity> violationEntities;
 
     @Override
     protected int getLayoutId() {
@@ -74,7 +78,8 @@ public class DetailInspectionActivity extends BaseActivity{
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             tvHazard.setCompoundDrawables(null, null, drawable, null);
 
-            violationAdapter = new ViolationAdapter(this,getViolationList(inspectionEntity.getViolLump()),R.layout.item_violation);
+            violationEntities = getViolationList(inspectionEntity.getViolLump());
+            violationAdapter = new ViolationAdapter(this,violationEntities,R.layout.item_violation);
             lvViolations.setAdapter(violationAdapter);
         }
     }
@@ -82,6 +87,12 @@ public class DetailInspectionActivity extends BaseActivity{
     @Override
     protected void initEvent() {
         super.initEvent();
+        lvViolations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(DetailInspectionActivity.this,violationEntities.get(i).getDesc(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private List<ViolationEntity> getViolationList(String desc){
