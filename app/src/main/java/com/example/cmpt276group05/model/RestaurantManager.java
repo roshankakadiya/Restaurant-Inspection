@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import com.opencsv.CSVReader;
@@ -47,15 +49,15 @@ public class RestaurantManager implements Iterable<Restaurant>{
             context = ctx.getApplicationContext();
             readRestaurantData();
         }
-        sort();
+        sortArrayList();
 
         return instance;
     }
 
 
 
-    private static void sort() {
-
+    private static void sortArrayList() {
+        Collections.sort(restaurantSamples, (restaurant, t1) -> restaurant.getName().compareTo(t1.getName()));
     }
 
     public void add(Restaurant restaurant) {
@@ -81,7 +83,7 @@ public class RestaurantManager implements Iterable<Restaurant>{
         );
         CSVReader csvReader = new CSVReader(reader);
 
-        String line[] = new String[7];
+        String[] line = new String[7];
 
         try {
             // Skip over header
