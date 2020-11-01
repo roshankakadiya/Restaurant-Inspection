@@ -77,4 +77,6 @@ public class Restaurant {
                 ", longitude=" + longitude +
                 '}';
     }
+
+
 }
