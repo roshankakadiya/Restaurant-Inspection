@@ -1,5 +1,10 @@
 package com.example.cmpt276group05.model;
 
+/*
+ * Data Class for Restaurant
+ */
+
+
 public class Restaurant {
     private String trackingNumber;
     private String name;

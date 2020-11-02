@@ -3,8 +3,6 @@ package com.example.cmpt276group05.model;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.cmpt276group05.R;
 
 import java.io.BufferedReader;
@@ -14,7 +12,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import com.opencsv.CSVReader;
@@ -27,13 +24,13 @@ import com.opencsv.exceptions.CsvValidationException;
 
 public class RestaurantManager implements Iterable<Restaurant>{
 
-    private static List<Restaurant> restaurantSamples = new ArrayList<>();
+    private static List<Restaurant> restaurantList = new ArrayList<>();
     private static Context context;
     // Allows access to files
 
     @Override
     public Iterator<Restaurant> iterator() {
-        return restaurantSamples.iterator();
+        return restaurantList.iterator();
     }
 
 
@@ -56,24 +53,34 @@ public class RestaurantManager implements Iterable<Restaurant>{
 
 
 
-    private static void sortArrayList() {
-        Collections.sort(restaurantSamples, (restaurant, t1) -> restaurant.getName().compareTo(t1.getName()));
+    public static void sortArrayList() {
+        Collections.sort(restaurantList, (restaurant, t1) -> restaurant.getName().compareTo(t1.getName()));
     }
 
     public void add(Restaurant restaurant) {
-        restaurantSamples.add(restaurant);
+        restaurantList.add(restaurant);
     }
 
     public Restaurant get(int index) {
-        return restaurantSamples.get(index);
+        return restaurantList.get(index);
+    }
+
+    // Do not use unless you actually know tracking number
+    public Restaurant getByTrackingNumber(String trackingNumber) {
+        for (int x = 0; x < restaurantList.size(); x++) {
+            if (restaurantList.get(x).getTrackingNumber().equals(trackingNumber)) {
+                return restaurantList.get(x);
+            }
+        }
+        return null;
     }
 
     public int getNumRestaurant() {
-        return restaurantSamples.size();
+        return restaurantList.size();
     }
 
     public void removeAtIndex(int index) {
-        restaurantSamples.remove(index);
+        restaurantList.remove(index);
     }
 
     private static void readRestaurantData() {
@@ -99,7 +106,7 @@ public class RestaurantManager implements Iterable<Restaurant>{
                 sample.setLatitude(Double.parseDouble(line[5]));
                 sample.setLongitude(Double.parseDouble(line[6]));
 
-                restaurantSamples.add(sample);
+                restaurantList.add(sample);
 
                 Log.d("Myactivity", "Just Created: " + sample);
             }
