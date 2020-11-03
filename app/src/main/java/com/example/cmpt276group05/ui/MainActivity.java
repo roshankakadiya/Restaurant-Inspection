@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
              }
             TDate.add(ins.getInspectionDate());
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+
         arrayAdapter adapter = new arrayAdapter(this,TName,TIssue,THazardC,HazardSelection,TDate);
         listview.setAdapter(adapter );
         //onClickListener
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater layoutinflater =(LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 View view = layoutinflater.inflate(R.layout.customview,parent,false);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
                 ImageView resIcon =  view.findViewById(R.id.resIcon);
                 TextView name = view.findViewById(R.id.name);
@@ -167,29 +168,14 @@ public class MainActivity extends AppCompatActivity {
                 TextView hazardcolors = view.findViewById(R.id.hazardcolor);
                 ImageView HazardIcons =  view.findViewById(R.id.hazardicon);
 
-                resIcon.setImageResource(images[position]);
+//                resIcon.setImageResource(images[position]);
                 name.setText(Name[position]);
-                dates.setText((CharSequence) date[position]);
+                dates.setText(dateFormat.format(date[position]));
                 issues.setText(issue[position]);
                 hazardcolors.setText(hazardC[position]);
-                HazardIcons.setImageResource(hazardI[position ]);
+//                HazardIcons.setImageResource(hazardI[position ]);
 
                 return view;
             }
         }//arrayAdapter
-
-
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                    Intent intent = YOURFUNCTIONNAME(MainActivity.this, position);
-////                    startActivity(intent);
-//            }
-//
-//
-//        });
-
-
-
-
 }//class
