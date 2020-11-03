@@ -91,31 +91,7 @@ public class MainActivity extends AppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-                if(position == 1){
-                    Toast.makeText(MainActivity.this,"what",Toast.LENGTH_SHORT).show();
-                }
-
+                Toast.makeText(MainActivity.this,"Selected",Toast.LENGTH_SHORT).show();
             }
         });
 
