@@ -139,6 +139,7 @@ public class InspectionManager implements Iterable<Inspection>{
         }
     }
 
+
     // Gets most recent inspection using tracking number of restaurant. Use only if tracking number
     // is known
     public Inspection getMostRecentInspection(String trackingNumber) {
