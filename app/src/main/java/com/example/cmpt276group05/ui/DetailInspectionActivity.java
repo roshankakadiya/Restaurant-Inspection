@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.adapter.ViolationAdapter;
@@ -23,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DetailInspectionActivity extends BaseActivity{
+public class DetailInspectionActivity extends AppCompatActivity {
     private Inspection inspection=null;
     private TextView tvDate,tvType,tvCritical,tvHazard;
     private ListView lvViolations;
@@ -31,14 +35,17 @@ public class DetailInspectionActivity extends BaseActivity{
     private ViolationAdapter violationAdapter;
     private List<Violation> violationEntities;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_inspection_detail;
-    }
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_inspection_detail);
+        initView();
+        initData();
+        initEvent();
+    }
+
     protected void initView() {
-        super.initView();
         tvDate = findViewById(R.id.tv_date);
         tvType = findViewById(R.id.tv_type);
         tvCritical = findViewById(R.id.tv_critical);
@@ -46,9 +53,7 @@ public class DetailInspectionActivity extends BaseActivity{
         lvViolations = findViewById(R.id.lv_violation);
     }
 
-    @Override
     protected void initData() {
-        super.initData();
         String inspectData = getIntent().getStringExtra(BusinessConstant.INSPECTION_DATA);
         if(!TextUtils.isEmpty(inspectData)){
             inspection = new Gson().fromJson(inspectData,Inspection.class);
@@ -84,9 +89,7 @@ public class DetailInspectionActivity extends BaseActivity{
         }
     }
 
-    @Override
     protected void initEvent() {
-        super.initEvent();
         lvViolations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
