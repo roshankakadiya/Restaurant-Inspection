@@ -1,9 +1,18 @@
 package com.example.cmpt276group05.model;
 
-public class ViolationEntity extends BaseEntity {
+public class Violation{
+    private String code;
     private String cirtical;
     private String desc;
     private String repeat;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getDesc() {
         return desc;

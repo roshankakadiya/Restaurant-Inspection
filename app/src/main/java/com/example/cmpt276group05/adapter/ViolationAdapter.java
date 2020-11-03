@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import com.example.cmpt276group05.R;
-import com.example.cmpt276group05.model.ViolationEntity;
 
 import java.util.List;
 

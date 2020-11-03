@@ -1,4 +1,4 @@
-package com.example.cmpt276group05.activity;
+package com.example.cmpt276group05.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
