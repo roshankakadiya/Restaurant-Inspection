@@ -4,17 +4,18 @@ import android.content.Context;
 import android.view.View;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.model.Violation;
 
 import java.util.List;
 
-public class ViolationAdapter extends CommonAdapter<ViolationEntity> {
+public class ViolationAdapter extends CommonAdapter<Violation> {
 
-    public ViolationAdapter(Context context, List<ViolationEntity> list, int layoutId) {
+    public ViolationAdapter(Context context, List<Violation> list, int layoutId) {
         super(context, list, layoutId);
     }
 
     @Override
-    public void convert(ViewHolder holder, ViolationEntity item) {
+    public void convert(ViewHolder holder, Violation item) {
         super.convert(holder, item);
         if(item.getCirtical().equals("Critical")){
             holder.setImageDrawable(R.id.iv_cirtical,R.mipmap.cirtical);
