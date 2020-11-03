@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> THazardC= new ArrayList<String>();
     ArrayList<Integer> HazardSelection= new ArrayList<Integer>();
     int THazardI[] = {R.mipmap.low,R.mipmap.mid,R.mipmap.high};
-    ArrayList<Date> TDate= new ArrayList<Date>();
+    ArrayList<String> TDate= new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
              TName.add(res.getName());
              TIssue.add(String.valueOf(ins.getNumCritViolations() + ins.getNumNonCritViolations()));
              THazardC.add(ins.getHazardRating());
-            TDate.add(ins.getInspectionDate());
+            TDate.add(ins.adjustTime(ins.getInspectionDate()));
         }
 
         arrayAdapter adapter = new arrayAdapter(this,TName,TIssue,THazardC,HazardSelection,TDate);
@@ -134,16 +134,16 @@ public class MainActivity extends AppCompatActivity {
             String issue[];
             String hazardC[];
             int hazardI[];
-            Date date[];
+            String date[];
 
-            arrayAdapter(Context cont, ArrayList<String> name, ArrayList<String> issue, ArrayList<String> hazardC, ArrayList<Integer> hazardI, ArrayList<Date> date){
+            arrayAdapter(Context cont, ArrayList<String> name, ArrayList<String> issue, ArrayList<String> hazardC, ArrayList<Integer> hazardI, ArrayList<String> date){
                  super(cont,R.layout.customview,R.id.name,name);
                   this.context = cont;
                   this.Name = TName.toArray(new String[0]);
                   this.issue = TIssue.toArray(new String[0]);
                   this.hazardC  = THazardC.toArray(new String[0]);
                   this.hazardI = THazardI;
-                  this.date = TDate.toArray(new Date[0]);
+                  this.date = TDate.toArray(new String[0]);
             }
 
             @NonNull
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
                 resIcon.setImageResource(images[position]);
                 name.setText(Name[position]);
-                dates.setText(dateFormat.format(date[position]));
+                dates.setText(date[position]);
                 issues.setText(issue[position]);
                 hazardcolors.setText(hazardC[position]);
                 if(hazardC[position].equals("Low")){
