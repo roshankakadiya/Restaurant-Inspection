@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> TIssue= new ArrayList<String>();
     ArrayList<String> THazardC= new ArrayList<String>();
     ArrayList<Integer> HazardSelection= new ArrayList<Integer>();
-    int THazardI[] = {R.drawable.low,R.drawable.moderate,R.drawable.high};
+    int THazardI[] = {R.mipmap.low,R.mipmap.mid,R.mipmap.high};
     ArrayList<Date> TDate= new ArrayList<Date>();
 
     @Override
@@ -79,15 +79,8 @@ public class MainActivity extends AppCompatActivity {
             Restaurant res = restaurantManager.get(i);
             Inspection ins = inspectionManager.get(i);
              TName.add(res.getName());
-             TIssue.add(ins.getViolationReport() + ins.getNumNonCritViolations());
+             TIssue.add(String.valueOf(ins.getNumCritViolations() + ins.getNumNonCritViolations()));
              THazardC.add(ins.getHazardRating());
-             if(ins.getHazardRating().equals("Low")){
-                 HazardSelection.add(0);
-             }else if (ins.getHazardRating().equals("Moderate")){
-                 HazardSelection.add(1);
-             }else if(ins.getHazardRating().equals("High")){
-                 HazardSelection.add(2);
-             }
             TDate.add(ins.getInspectionDate());
         }
 
@@ -161,19 +154,26 @@ public class MainActivity extends AppCompatActivity {
                 View view = layoutinflater.inflate(R.layout.customview,parent,false);
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
-                ImageView resIcon =  view.findViewById(R.id.resIcon);
+                ImageView resIcon =  view.findViewById(R.id.image);
                 TextView name = view.findViewById(R.id.name);
                 TextView dates = view.findViewById(R.id.date);
                 TextView issues = view.findViewById(R.id.issue);
                 TextView hazardcolors = view.findViewById(R.id.hazardcolor);
                 ImageView HazardIcons =  view.findViewById(R.id.hazardicon);
 
-//                resIcon.setImageResource(images[position]);
+                resIcon.setImageResource(images[position]);
                 name.setText(Name[position]);
                 dates.setText(dateFormat.format(date[position]));
                 issues.setText(issue[position]);
                 hazardcolors.setText(hazardC[position]);
-//                HazardIcons.setImageResource(hazardI[position ]);
+                if(hazardC[position].equals("Low")){
+                    HazardIcons.setImageResource(hazardI[0]);
+                }else if (hazardC[position].equals("Moderate")){
+                    HazardIcons.setImageResource(hazardI[1]);
+                }else if(hazardC[position].equals("High")){
+                    HazardIcons.setImageResource(hazardI[2]);
+                }
+
 
                 return view;
             }
