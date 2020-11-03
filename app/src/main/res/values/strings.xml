@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">cmpt276group05</string>
-    <string name="name">Restaurant Names|</string>
-    <string name="of_issues"># of Issues|</string>
-    <string name="icon">Restaurant Icons|</string>
-    <string name="hazard_color">Hazard color|</string>
-    <string name="hazard_icon">Hazard Icon|</string>
-    <string name="inspection_date">Inspection date|</string>
+    <string name="name">Restaurant Names:</string>
+    <string name="of_issues"># of Issues:</string>
+    <string name="icon">Restaurant Icons:</string>
+    <string name="hazard_color">Hazard color:</string>
+    <string name="hazard_icon">Hazard Icon:</string>
+    <string name="inspection_date">Inspection date:</string>
 </resources>

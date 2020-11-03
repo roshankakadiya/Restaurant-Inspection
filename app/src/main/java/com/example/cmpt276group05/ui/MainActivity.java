@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Intent intent = makeLaunchIntent(MainActivity.this, position);
+//                    Intent intent = YOURFUNCTIONNAME(MainActivity.this, position);
 //                    startActivity(intent);
             }
 
