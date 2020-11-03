@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <ListView
-        android:id="@+id/LensListing"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore = "MissingConstrains" />
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:divider="#b5b5b5"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/list" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

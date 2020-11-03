@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.DynamicLayout;
 import android.text.style.DynamicDrawableSpan;
@@ -11,9 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.model.Inspection;
@@ -47,49 +50,35 @@ public class MainActivity extends AppCompatActivity {
 
         restaurantManager = RestaurantManager.getInstance(this);
 
-        // Testing restaurant manager
-        for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {
-            Log.d("Restaurant", restaurantManager.get(x).toString());
-        }
-
-        // Testing inspection manager
-        inspectionManager = InspectionManager.getInstance(this);
-        for (int x = 0; x < inspectionManager.getNumInspection(); x++) {
-            Log.d("Inspection", inspectionManager.get(x).toString());
-        }
-
-        List<Inspection> inspection;
-        inspection = inspectionManager.getList("SWOD-AHZUMF");
-        for (int x = 0; x < inspection.size(); x++) {
-            Log.d("LIST", inspection.get(x).toString());
-        }
-        Log.d("SIZE", String.valueOf(inspection.size()));
-
-        Log.d("numberOfissues", String.valueOf(inspectionManager.numOfIssuesFound("SWOD-AHZUMF")));
-
-        LinearLayout linearL = new LinearLayout(this);
-        ListView listV = new ListView(this);
-
-        final String[] DynamicListElements = new String[] {
-                "Android",
-                "PHP",
-                "Android Studio",
-                "PhpMyAdmin"
-        };
-
-
-
-
-        //create list View
-        ArrayAdapter<String> newarray = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, DynamicListElements);
-        listV.setAdapter(newarray);
-        linearL.addView(listV);
-
-        this.setContentView(linearL,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
+        showListView();
 
     }
 
+    private void showListView() {
+        ArrayList<String> inputRes = new ArrayList<>();
+        ListView listview = null;
+
+        for (int i = 0; i < restaurantManager.getNumRestaurant(); i++) {
+            Restaurant temp = restaurantManager.get(i);
+            inputRes.add(temp.getName() + "/kkkkkkkkkkkkk" );
+//                    () + "/" + temp.()+  + "/" + + "/"
+        }
+
+
+        listview = (ListView) findViewById(R.id.list);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, inputRes);
+        listview.setAdapter(arrayAdapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    Intent intent = makeLaunchIntent(MainActivity.this, position);
+//                    startActivity(intent);
+            }
+
+
+        });
+    }
 
 
 

@@ -25,19 +25,19 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <include layout="@layout/content_main" />
 
         <LinearLayout
             android:id="@+id/initiallv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal"
             android:weightSum="6">
@@ -48,8 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:text="Name"
-                android:textStyle="bold" />
+                android:text="@string/name"
+                android:textStyle="bold"
+                tools:ignore="NestedWeights" />
 
             <TextView
                 android:id="@+id/resIcon"
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:text="Icon"
+                android:text="@string/icon"
                 android:textStyle="bold" />
 
             <TextView
@@ -66,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:text="# of Issues"
+                android:text="@string/of_issues"
                 android:textStyle="bold" />
 
             <TextView
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:text="Hazard color"
+                android:text="@string/hazard_color"
                 android:textStyle="bold" />
 
             <TextView
@@ -84,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:text="Hazard Icon"
+                android:text="@string/hazard_icon"
                 android:textStyle="bold" />
 
             <TextView
@@ -93,11 +94,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:text="Inspection date"
+                android:text="@string/inspection_date"
                 android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
+
+    <include
+        layout="@layout/content_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
