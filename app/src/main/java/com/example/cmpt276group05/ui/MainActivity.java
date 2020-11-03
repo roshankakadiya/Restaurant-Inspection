@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.DynamicLayout;
@@ -37,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
     private RestaurantManager restaurantManager;
     private InspectionManager inspectionManager;
 
+    int images[] = {R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four,R.drawable.five,R.drawable.six,R.drawable.seven,R.drawable.eight};
+    String TName[];
+    String TIssue[];
+    String THazardC[];
+    int THazardI[] = {};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,37 +57,51 @@ public class MainActivity extends AppCompatActivity {
 
         restaurantManager = RestaurantManager.getInstance(this);
 
-        showListView();
 
-    }
+        ListView listview = (ListView) findViewById(R.id.list);
 
-    private void showListView() {
-        ArrayList<String> inputRes = new ArrayList<>();
-        ListView listview = null;
 
         for (int i = 0; i < restaurantManager.getNumRestaurant(); i++) {
             Restaurant temp = restaurantManager.get(i);
-            inputRes.add(temp.getName() + "/kkkkkkkkkkkkk" );
-//                    () + "/" + temp.()+  + "/" + + "/"
         }
 
-
-        listview = (ListView) findViewById(R.id.list);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, inputRes);
-        listview.setAdapter(arrayAdapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Intent intent = YOURFUNCTIONNAME(MainActivity.this, position);
-//                    startActivity(intent);
-            }
-
-
-        });
     }
 
 
 
 
-}
+
+
+        class arrayAdapter extends ArrayAdapter<String> {
+
+
+            Context  context;
+            String Name[];
+            String issue[];
+            String hazardC[];
+            int hazardI[];
+            String date[];
+
+            arrayAdapter(Context cont,String name[],String issue,String hazardC,int hazardI,String date){
+                 super(cont,R.layout.customview,R.id.name,name);
+                  this.context = cont;
+                  this.Name = temp.getName();
+            }
+
+        }//arrayAdapter
+
+
+//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+////                    Intent intent = YOURFUNCTIONNAME(MainActivity.this, position);
+////                    startActivity(intent);
+//            }
+//
+//
+//        });
+
+
+
+
+}//class
