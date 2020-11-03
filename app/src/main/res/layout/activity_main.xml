@@ -24,89 +24,80 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <HorizontalScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#888888"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
+        <include layout="@layout/content_main" />
 
         <LinearLayout
+            android:id="@+id/initiallv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="6">
 
-            <LinearLayout
-                android:id="@+id/initiallv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/resName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:weightSum="6">
+                android:text="Name"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/resName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:text="Name"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/resIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:text="Icon"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/resIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:text="Icon"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/issues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:text="# of Issues"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/issues"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:text="# of Issue"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:text="Hazard color"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:text="Hazard color"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/colorIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:text="Hazard Icon"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/colorIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:text="Hazard Icon"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/period"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:text="Time Period"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:text="Inspection date"
+                android:textStyle="bold" />
         </LinearLayout>
 
-    </HorizontalScrollView>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

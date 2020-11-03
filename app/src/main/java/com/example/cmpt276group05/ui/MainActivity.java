@@ -85,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
         listV.setAdapter(newarray);
         linearL.addView(listV);
 
-//        this.setContentView(linearL,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
+        this.setContentView(linearL,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
 
     }
