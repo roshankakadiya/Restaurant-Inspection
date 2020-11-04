@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="Resturant Name"
+                android:text="@string/restaurant_name"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="Date"
+                android:text="@string/date"
                 android:gravity="right"
                 android:textColor="#000000"
                 android:textSize="20sp"
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="Issue"
+                android:text="@string/issue"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="Hazard"
+                android:text="@string/hazard"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 android:textStyle="bold" />

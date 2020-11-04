@@ -77,11 +77,21 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < restaurantManager.getNumRestaurant(); i++) {
             Restaurant res = restaurantManager.get(i);
-            Inspection ins = inspectionManager.get(i);
+            Log.d("print", String.valueOf(res));
+            Inspection ins = inspectionManager.getMostRecentInspection(res.getTrackingNumber());
+            Log.d("Print", String.valueOf(ins));
              TName.add(res.getName());
-             TIssue.add(String.valueOf(ins.getNumCritViolations() + ins.getNumNonCritViolations()));
-             THazardC.add(ins.getHazardRating());
-            TDate.add(ins.adjustTime());
+             // In case no inspections exist yet
+             try {
+                 TIssue.add(String.valueOf(ins.getNumCritViolations() + ins.getNumNonCritViolations()));
+                 THazardC.add(ins.getHazardRating());
+                 TDate.add(ins.adjustTime());
+             }
+             catch (NullPointerException e) {
+                 TIssue.add("No Inspection found");
+                 TDate.add("No Inspection found");
+             }
+
         }
 
         arrayAdapter adapter = new arrayAdapter(this,TName,TIssue,THazardC,HazardSelection,TDate);
@@ -107,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         class arrayAdapter extends ArrayAdapter<String> {
 
 
-            Context  context;
+            Context context;
             String Name[];
             String issue[];
             String hazardC[];
