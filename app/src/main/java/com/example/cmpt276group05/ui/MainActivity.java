@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private RestaurantManager restaurantManager;
     private InspectionManager inspectionManager;
 
-    int images[] = {R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four,R.drawable.five,R.drawable.six,R.drawable.seven,R.drawable.eight};
+    int images[] = {R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four,R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four};
     ArrayList<String> TName= new ArrayList<String>();
     ArrayList<String> TIssue= new ArrayList<String>();
     ArrayList<String> THazardC= new ArrayList<String>();
@@ -81,17 +81,19 @@ public class MainActivity extends AppCompatActivity {
              TName.add(res.getName());
              TIssue.add(String.valueOf(ins.getNumCritViolations() + ins.getNumNonCritViolations()));
              THazardC.add(ins.getHazardRating());
-            TDate.add(ins.adjustTime(ins.getInspectionDate()));
+            TDate.add(ins.adjustTime());
         }
 
         arrayAdapter adapter = new arrayAdapter(this,TName,TIssue,THazardC,HazardSelection,TDate);
         listview.setAdapter(adapter );
+
         //onClickListener
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this,"Selected",Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent();
             }
         });
 
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 resIcon.setImageResource(images[position]);
                 name.setText(Name[position]);
                 dates.setText(date[position]);
-                issues.setText(issue[position]);
+                issues.setText("# of issues found: " + issue[position]);
                 hazardcolors.setText(hazardC[position]);
                 if(hazardC[position].equals("Low")){
                     HazardIcons.setImageResource(hazardI[0]);

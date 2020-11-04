@@ -1,5 +1,8 @@
 package com.example.cmpt276group05.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -75,32 +78,59 @@ public class Inspection {
         this.violationReport = violationReport;
     }
 
-    public String adjustTime(Date date){
 
-        Date now = new Date();
-        long diffInMillies = Math.abs(Objects.requireNonNull(date.getTime() - now.getTime()));
-        long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    public String adjustTime(){
 
-        String timeInfo = null;
-        if(diff < 60) {
-            if(diff == 1)
-                timeInfo = "About " + diff + " minute ago";
-            else
-                timeInfo = "About " + diff + " minutes ago";
-        }
-        else if((diff / 60) < 24) {
-            if((int) (diff / 60) == 1)
-                timeInfo = "About " + (int) (diff / 60) + " hour ago";
-            else
-                timeInfo = "About " + (int) (diff / 60) + " hours ago";
-        }
-        else {
-            if((int) (diff / (60 * 24)) == 1)
-                timeInfo = "About " + (int) (diff / (60 * 24)) + " day ago";
-            else
-                timeInfo = "About " + (int) (diff / (60 * 24)) + " days ago";
-        }
-        return timeInfo;
+//        Date now = inspectionDate;
+//        long diffInMillies = Math.abs(Objects.requireNonNull(date.getTime() - now.getTime()));
+//        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+//
+//        Date date = Calendar.getInstance().getTime();
+//        DateFormat monthformat = new SimpleDateFormat("MMMM");
+//        DateFormat dayformat = new SimpleDateFormat("dd");
+//        String month;
+//        String days;
+//
+//        if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }else if(monthformat.equals("1") && monthformat.equals("01")){
+//            month = "Jan";
+//        }
+//        String strDate = dateFormat.format(date);
+//
+//        String output = null;
+//        if(diff < 30) {
+//            output = diff + " days ago";
+//        }
+//        else if(diff < 365) {
+//            if(diff == 1)
+//                output = ;
+//            else
+//                output = ;
+//        }
+//        else {
+//            if((int) (diff / (60 * 24)) == 1)
+//                output = "About " + (int) (diff / (60 * 24)) + " day ago";
+//            else
+//                output = "About " + (int) (diff / (60 * 24)) + " days ago";
+//        }
+//        return output;
+
+        return "adasdasd";
     }
 
     @Override

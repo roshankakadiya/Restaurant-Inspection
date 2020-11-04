@@ -18,6 +18,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" />
 
@@ -33,70 +34,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-
-        <LinearLayout
-            android:id="@+id/initiallv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="6">
-
-            <TextView
-                android:id="@+id/resName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:text="@string/name"
-                android:textStyle="bold"
-                tools:ignore="NestedWeights" />
-
-            <TextView
-                android:id="@+id/resIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:text="@string/icon"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/issues"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:text="@string/of_issues"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:text="@string/hazard_color"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/colorIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:text="@string/hazard_icon"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/period"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:text="@string/inspection_date"
-                android:textStyle="bold" />
-        </LinearLayout>
 
     </LinearLayout>
 
