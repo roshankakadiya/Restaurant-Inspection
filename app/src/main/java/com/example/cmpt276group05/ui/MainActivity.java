@@ -1,3 +1,9 @@
+// Main Activity.java
+//input data to a custom layout
+//change the date format to better indicate the date and time period
+//add icon for restaurant and Hazard indicators
+
+
 package com.example.cmpt276group05.ui;
 
 import androidx.annotation.NonNull;
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                  TDate.add(ins.adjustTime());
              }
              catch (NullPointerException e) {
+                 THazardC.add("Low");
                  TIssue.add("No Inspection found");
                  TDate.add("No Inspection found");
              }
@@ -103,7 +110,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this,"Selected",Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent();
+//                Intent intent = new Intent(MainActivity.this,PUTYOURACTIVITYNAMEHERE.class);
+                //please put your activities name on the class above!
+//                intent.putextra("Tracking_Number",restaurantManager.get(position).getTrackingNumber());
+//                  startActivity(intent);
             }
         });
 
@@ -153,10 +163,9 @@ public class MainActivity extends AppCompatActivity {
                 name.setText(Name[position]);
                 dates.setText(date[position]);
                 issues.setText("# of issues found: " + issue[position]);
-                hazardcolors.setText(hazardC[position]);
+
                 if(hazardC[position].equals("Low")){
                     HazardIcons.setImageResource(hazardI[0]);
-
                 }else if (hazardC[position].equals("Moderate")){
                     HazardIcons.setImageResource(hazardI[1]);
                 }else if(hazardC[position].equals("High")){
