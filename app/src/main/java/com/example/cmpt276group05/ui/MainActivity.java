@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 hazardcolors.setText(hazardC[position]);
                 if(hazardC[position].equals("Low")){
                     HazardIcons.setImageResource(hazardI[0]);
+
                 }else if (hazardC[position].equals("Moderate")){
                     HazardIcons.setImageResource(hazardI[1]);
                 }else if(hazardC[position].equals("High")){
