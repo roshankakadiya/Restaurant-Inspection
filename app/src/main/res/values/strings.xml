@@ -5,7 +5,7 @@
     <string name="icon">Restaurant Icons:</string>
     <string name="hazard_color">Hazard color:</string>
     <string name="hazard_icon">Hazard Icon:</string>
-    <string name="inspection_date">Inspection date:</string>
+    <string name="inspection_dates">Inspection date:</string>
     <string name="restaurant_name">Restaurant Name</string>
     <string name="date">Date</string>
     <string name="issue">Issue</string>
