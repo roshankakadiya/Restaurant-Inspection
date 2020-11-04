@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">cmpt276group05</string>
+    <string name="name">Restaurant Names:</string>
+    <string name="of_issues"># of Issues:</string>
+    <string name="icon">Restaurant Icons:</string>
+    <string name="hazard_color">Hazard color:</string>
+    <string name="hazard_icon">Hazard Icon:</string>
+    <string name="inspection_date">Inspection date:</string>
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="date">Date</string>
+    <string name="issue">Issue</string>
+    <string name="hazard">Hazard</string>
     <string name="inspection_date">Date</string>
     <string name="inspection_type">Type</string>
     <string name="inspection_critical">Critical/No Critical</string>
