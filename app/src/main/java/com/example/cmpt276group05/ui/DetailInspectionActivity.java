@@ -45,6 +45,9 @@ public class DetailInspectionActivity extends AppCompatActivity {
         initEvent();
     }
 
+    /*
+    * init activity view
+    * */
     protected void initView() {
         tvDate = findViewById(R.id.tv_date);
         tvType = findViewById(R.id.tv_type);
@@ -53,7 +56,11 @@ public class DetailInspectionActivity extends AppCompatActivity {
         lvViolations = findViewById(R.id.lv_violation);
     }
 
+    /*
+    * init activity data
+    * */
     protected void initData() {
+        //get inspectdata by intent
         String inspectData = getIntent().getStringExtra(BusinessConstant.INSPECTION_DATA);
         if(!TextUtils.isEmpty(inspectData)){
             inspection = new Gson().fromJson(inspectData,Inspection.class);
@@ -89,8 +96,12 @@ public class DetailInspectionActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * init activity event
+    * */
     protected void initEvent() {
         lvViolations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //add item click event and show toast
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(DetailInspectionActivity.this,violationEntities.get(i).getDesc(), Toast.LENGTH_SHORT).show();
@@ -98,6 +109,10 @@ public class DetailInspectionActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    * parse inspection violationReport to violation list
+    * @param desc
+    * */
     private List<Violation> getViolationList(String desc){
         List<Violation> violationEntities = new ArrayList<>();
         if(TextUtils.isEmpty(desc)){
@@ -116,6 +131,9 @@ public class DetailInspectionActivity extends AppCompatActivity {
         return violationEntities;
     }
 
+    /*
+    * go to inspection datail activity
+    * */
     public static void goToInspectionDetail(Context context,Inspection inspection){
         Intent intent = new Intent(context,DetailInspectionActivity.class);
         intent.putExtra(BusinessConstant.INSPECTION_DATA, new Gson().toJson(inspection));
