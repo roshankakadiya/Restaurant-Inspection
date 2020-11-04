@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     int [] cricissues = new int[10] ;
     int [] noncricissues=new int[10];
     ArrayList<String> hazardlevel=new ArrayList<String>();
-    //ArrayList<String> insDate=new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         MyAdapter adapter=new MyAdapter(this,instype,cricissues,noncricissues,hazardlevel);
 
 
-       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.activity_main,instype);
-
          listview.setAdapter(adapter);
 
     }
@@ -73,12 +71,6 @@ public class MainActivity extends AppCompatActivity {
             this.cricviolations=cricissues;
             this.noncricviolations=noncricissues;
             this.hazardlevels=hazardstring.toArray(new String[0]);
-
-
-
-
-
-
 
 
         }
