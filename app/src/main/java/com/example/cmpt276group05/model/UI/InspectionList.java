@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,16 @@ import android.widget.TextView;
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.model.Model.Inspection;
 import com.example.cmpt276group05.model.Model.InspectionManager;
+import com.example.cmpt276group05.model.Model.Restaurant;
+import com.example.cmpt276group05.model.Model.RestaurantManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InspectionList extends AppCompatActivity {
 
+    private RestaurantManager restaurantManager;
+    private Restaurant res;
     private InspectionManager inspectionManager;
     private List<Inspection> myInspection=new ArrayList<Inspection>();
 
@@ -39,8 +44,25 @@ public class InspectionList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.displayinspectionlist);
 
+        Intent intent = getIntent();
+        String a="SWOD-APSP3X";
+        //String trackingnum=intent.getStringExtra("Tracking Number",a);
+
+        restaurantManager=RestaurantManager.getInstance(this);
+        res=restaurantManager.getByTrackingNumber(a);
+
+        TextView displayrestaurantname=(TextView) findViewById(R.id.restaurantnametextView);
+        displayrestaurantname.setText(res.getName());
+
+        TextView displayrestaurantaddress=(TextView) findViewById(R.id.addresstextView);
+        displayrestaurantaddress.setText(res.getAddress());
+
+        TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
+        displayrestaurantGpscord.setText(""+res.getLatitude()+","+res.getLongitude());
+
+
         inspectionManager=InspectionManager.getInstance(this);
-        myInspection=inspectionManager.getList("SWOD-APSP3X");
+        myInspection=inspectionManager.getList(a);
 
         listview=(ListView) findViewById(R.id.InspectionListview);
 
