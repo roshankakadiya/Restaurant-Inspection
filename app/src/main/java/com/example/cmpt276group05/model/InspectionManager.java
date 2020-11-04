@@ -67,7 +67,7 @@ public class InspectionManager implements Iterable<Inspection>{
 
     // Get list of inspections relating to tracking number, in most recent order
     // Assumes list is presorted
-    public List<Inspection> getList(String trackingNumber) {
+    public static List<Inspection> getList(String trackingNumber) {
         List<Inspection> listOfInspections = new ArrayList<>();
         boolean foundCluster = false;
         boolean endOfCluster = false;
