@@ -8,6 +8,9 @@ import com.example.cmpt276group05.model.Violation;
 
 import java.util.List;
 
+/*
+* violation adapter display violation item
+* */
 public class ViolationAdapter extends CommonAdapter<Violation> {
 
     public ViolationAdapter(Context context, List<Violation> list, int layoutId) {

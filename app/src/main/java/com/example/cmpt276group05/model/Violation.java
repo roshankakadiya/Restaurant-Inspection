@@ -1,10 +1,13 @@
 package com.example.cmpt276group05.model;
 
+/*
+* data class for Violation
+* */
 public class Violation{
-    private String code;
-    private String cirtical;
-    private String desc;
-    private String repeat;
+    private String code;//violation code
+    private String cirtical;//violation cirtical
+    private String desc;//violation description
+    private String repeat;//repeat or not repeat
 
     public String getCode() {
         return code;
