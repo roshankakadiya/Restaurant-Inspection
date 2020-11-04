@@ -10,4 +10,8 @@
     <string name="date">Date</string>
     <string name="issue">Issue</string>
     <string name="hazard">Hazard</string>
+    <string name="inspection_date">Date</string>
+    <string name="inspection_type">Type</string>
+    <string name="inspection_critical">Critical/No Critical</string>
+    <string name="inspection_hazard">HazardRating</string>
 </resources>
