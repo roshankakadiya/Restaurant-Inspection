@@ -1,4 +1,4 @@
-package com.example.cmpt276group05;
+package com.example.cmpt276group05.model.UI;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,13 +14,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.cmpt276group05.model.Inspection;
-import com.example.cmpt276group05.model.InspectionManager;
+import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.model.Model.Inspection;
+import com.example.cmpt276group05.model.Model.InspectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class InspectionList extends AppCompatActivity {
 
     private InspectionManager inspectionManager;
     private List<Inspection> myInspection=new ArrayList<Inspection>();

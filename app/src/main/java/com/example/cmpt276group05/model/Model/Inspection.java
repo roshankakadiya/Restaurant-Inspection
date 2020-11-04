@@ -1,4 +1,4 @@
-package com.example.cmpt276group05.model;
+package com.example.cmpt276group05.model.Model;
 
 import java.util.Date;
 
