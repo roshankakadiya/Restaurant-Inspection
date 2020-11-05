@@ -58,7 +58,7 @@ public class InspectionList extends AppCompatActivity {
         displayrestaurantname.setText(res.getName());
 
         TextView displayrestaurantaddress=(TextView) findViewById(R.id.addresstextView);
-        displayrestaurantaddress.setText(res.getAddress());
+        displayrestaurantaddress.setText(res.getAddress() + ", " + res.getCity());
 
         TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
         displayrestaurantGpscord.setText(""+res.getLatitude()+","+res.getLongitude());
