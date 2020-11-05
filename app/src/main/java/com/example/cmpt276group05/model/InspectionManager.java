@@ -3,8 +3,6 @@ package com.example.cmpt276group05.model;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.cmpt276group05.R;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -23,8 +21,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /*
  * Manager for Inspection objects. Has methods for sorting and adding/ deleting inspections
@@ -69,7 +65,7 @@ public class InspectionManager implements Iterable<Inspection>{
 
     // Get list of inspections relating to tracking number, in most recent order
     // Assumes list is presorted
-    public List<Inspection> getList(String trackingNumber) {
+    public static List<Inspection> getList(String trackingNumber) {
         List<Inspection> listOfInspections = new ArrayList<>();
         boolean foundCluster = false;
         boolean endOfCluster = false;

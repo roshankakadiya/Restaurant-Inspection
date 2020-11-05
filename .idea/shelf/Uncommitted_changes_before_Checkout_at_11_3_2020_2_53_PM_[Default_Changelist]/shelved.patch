@@ -1,0 +1,186 @@
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ui.MainActivity\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/restaurantname\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"32dp\"\r\n        android:text=\"RESTAURANT NAME\"\r\n        android:textAppearance=\"@style/TextAppearance.AppCompat.Large\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/address\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"24dp\"\r\n        android:text=\"ADDRESS\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.52\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/restaurantname\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/gpscord\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"24dp\"\r\n        android:text=\"GPS CORD\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/address\" />\r\n\r\n    <ListView\r\n        android:id=\"@+id/inspectionlistview\"\r\n        android:layout_width=\"413dp\"\r\n        android:layout_height=\"525dp\"\r\n        tools:layout_editor_absoluteX=\"-1dp\"\r\n        tools:layout_editor_absoluteY=\"206dp\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision 630a083b0ffc0b0eaa19ae3e75cb439ec3dab9d4)
++++ app/src/main/res/layout/inspection.xml	(date 1604442895563)
+@@ -39,9 +39,13 @@
+         app:layout_constraintTop_toBottomOf="@+id/address" />
+ 
+     <ListView
+-        android:id="@+id/inspectionlistview"
+-        android:layout_width="413dp"
+-        android:layout_height="525dp"
+-        tools:layout_editor_absoluteX="-1dp"
+-        tools:layout_editor_absoluteY="206dp" />
++        android:id="@+id/listofinspection"
++        android:layout_width="411dp"
++        android:layout_height="549dp"
++        android:layout_marginTop="8dp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/gpscord" />
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cmpt276group05.ui;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.ListView;\r\nimport android.widget.TextView;\r\n\r\nimport com.example.cmpt276group05.R;\r\nimport com.example.cmpt276group05.model.Inspection;\r\nimport com.example.cmpt276group05.model.InspectionManager;\r\nimport com.example.cmpt276group05.model.Restaurant;\r\nimport com.example.cmpt276group05.model.RestaurantManager;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.InputStreamReader;\r\nimport java.nio.charset.Charset;\r\nimport java.nio.charset.StandardCharsets;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n    //private RestaurantManager restaurantManager;\r\n    private InspectionManager inspectionManager;\r\n    private ArrayList<Inspection> inspectionList;\r\n    private List<Inspection> myInspection= new ArrayList<Inspection>();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n       /* restaurantManager = RestaurantManager.getInstance(this);\r\n\r\n        // Testing restaurant manager\r\n        for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {\r\n            Log.d(\"Restaurant\", restaurantManager.get(x).toString());\r\n        }\r\n\r\n        // Testing inspection manager\r\n        inspectionManager = InspectionManager.getInstance(this);\r\n        for (int x = 0; x < inspectionManager.getNumInspection(); x++) {\r\n            Log.d(\"Inspection\", inspectionManager.get(x).toString());\r\n        }\r\n\r\n        List<Inspection> inspection;\r\n        inspection = inspectionManager.getList(\"SWOD-AHZUMF\");\r\n        for (int x = 0; x < inspection.size(); x++) {\r\n            Log.d(\"LIST\", inspection.get(x).toString());\r\n        }\r\n        Log.d(\"SIZE\", String.valueOf(inspection.size()));\r\n\r\n        Log.d(\"numberOfissues\", String.valueOf(inspectionManager.numOfIssuesFound(\"SWOD-AHZUMF\")));\r\n       */\r\n\r\n        //list of inspection\r\n        populateInspectionList();\r\n\r\n        populateListView();\r\n\r\n    }\r\n\r\n    private void populateListView() {\r\n        ArrayAdapter<Inspection> adapter =new MyListAdapter();\r\n        ListView list=(ListView) findViewById(R.id.inspectionlistview);\r\n        list.setAdapter(adapter);\r\n\r\n\r\n    }\r\n\r\n    private class MyListAdapter extends ArrayAdapter<Inspection>{\r\n        public MyListAdapter(){\r\n            super(MainActivity.this,R.layout.list_of_inspectioin,myInspection);\r\n        }\r\n\r\n        @Override\r\n        public View getView(int position,  View convertView,  ViewGroup parent) {\r\n\r\n            View itemView=convertView;\r\n            if(itemView==null){\r\n                itemView=getLayoutInflater().inflate(R.layout.list_of_inspectioin,parent,false);\r\n            }\r\n\r\n            Inspection currentInspection=myInspection.get(position);\r\n\r\n            //number of critical issue\r\n            TextView criticalText=(TextView) itemView.findViewById(R.id.criticaltextview);\r\n            criticalText.setText( \"\"+ currentInspection.getNumCritViolations());\r\n\r\n\r\n            //number of non critical issue\r\n            TextView makeText2=(TextView) itemView.findViewById(R.id.noncriticaltextview);\r\n            makeText2.setText( \"\"+ currentInspection.getNumNonCritViolations());\r\n\r\n            //level of hazard\r\n            TextView makeText3=(TextView) itemView.findViewById(R.id.hazardleveltextview);\r\n            makeText3.setText(currentInspection.getHazardRating());\r\n\r\n\r\n            //how long\r\n\r\n            return itemView;\r\n            //return super.getDropDownView(position, convertView, parent);\r\n        }\r\n    }\r\n\r\n    private void populateInspectionList() {\r\n        myInspection=inspectionManager.getList(\"SWOD-AHZUMF\");\r\n    }\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java	(revision 630a083b0ffc0b0eaa19ae3e75cb439ec3dab9d4)
++++ app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java	(date 1604444018738)
+@@ -1,120 +1,64 @@
+ package com.example.cmpt276group05.ui;
+ 
+-import androidx.annotation.NonNull;
+-import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import android.content.Context;
+ import android.os.Bundle;
+-import android.util.Log;
+-import android.view.View;
+-import android.view.ViewGroup;
+ import android.widget.ArrayAdapter;
+ import android.widget.ListView;
+-import android.widget.TextView;
+ 
+ import com.example.cmpt276group05.R;
+ import com.example.cmpt276group05.model.Inspection;
+ import com.example.cmpt276group05.model.InspectionManager;
+-import com.example.cmpt276group05.model.Restaurant;
+ import com.example.cmpt276group05.model.RestaurantManager;
+ 
+-import java.io.BufferedReader;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.io.InputStreamReader;
+-import java.nio.charset.Charset;
+-import java.nio.charset.StandardCharsets;
+ import java.util.ArrayList;
+-import java.util.List;
+ 
+ public class MainActivity extends AppCompatActivity {
+-    //private RestaurantManager restaurantManager;
++    private RestaurantManager restaurantManager;
+     private InspectionManager inspectionManager;
+-    private ArrayList<Inspection> inspectionList;
+-    private List<Inspection> myInspection= new ArrayList<Inspection>();
++    //private ArrayList<Inspection> inspectionList;
++    //private List<Inspection> myInspection= new ArrayList<Inspection>();
++    ArrayList<String> insType=new ArrayList<String>();
++    ArrayList<Integer> cricissues = new ArrayList<Integer>();
++    ArrayList<Integer> noncricissues = new ArrayList<Integer>();
++    ArrayList<String> hazard = new ArrayList<String>();
++    ArrayList<String> TDate = new ArrayList<String>();
++
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
++
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_main);
+-       /* restaurantManager = RestaurantManager.getInstance(this);
+-
+-        // Testing restaurant manager
+-        for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {
+-            Log.d("Restaurant", restaurantManager.get(x).toString());
+-        }
+-
+-        // Testing inspection manager
++        restaurantManager = RestaurantManager.getInstance(this);
+         inspectionManager = InspectionManager.getInstance(this);
+-        for (int x = 0; x < inspectionManager.getNumInspection(); x++) {
+-            Log.d("Inspection", inspectionManager.get(x).toString());
+-        }
+ 
+-        List<Inspection> inspection;
+-        inspection = inspectionManager.getList("SWOD-AHZUMF");
+-        for (int x = 0; x < inspection.size(); x++) {
+-            Log.d("LIST", inspection.get(x).toString());
++        ListView listview = (ListView) findViewById(R.id.listofinspection);
++
++        for (int i=0;i<inspectionManager.getNumInspection();i++){
++            Inspection ins=inspectionManager.get(i);
++            insType.add(ins.getInspectionType());
+         }
+-        Log.d("SIZE", String.valueOf(inspection.size()));
+ 
+-        Log.d("numberOfissues", String.valueOf(inspectionManager.numOfIssuesFound("SWOD-AHZUMF")));
+-       */
++        arrayAdapter adapter= new arrayAdaper(this,insType);
++        listview.setAdapter(adapter);
+ 
+-        //list of inspection
+-        populateInspectionList();
+ 
+-        populateListView();
+ 
+     }
+ 
+-    private void populateListView() {
+-        ArrayAdapter<Inspection> adapter =new MyListAdapter();
+-        ListView list=(ListView) findViewById(R.id.inspectionlistview);
+-        list.setAdapter(adapter);
+ 
++    class arrayAdapter extends ArrayAdapter<String> {
++        Context context;
++        String inspectiontype[];
+ 
+-    }
++        arrayAdapter(Context cont,ArrayList<String> it){
++            super(cont,R.layout.inspection);
++            this.inspectiontype=it.toArray(new String[0]);
+ 
+-    private class MyListAdapter extends ArrayAdapter<Inspection>{
+-        public MyListAdapter(){
+-            super(MainActivity.this,R.layout.list_of_inspectioin,myInspection);
+-        }
+ 
+-        @Override
+-        public View getView(int position,  View convertView,  ViewGroup parent) {
+-
+-            View itemView=convertView;
+-            if(itemView==null){
+-                itemView=getLayoutInflater().inflate(R.layout.list_of_inspectioin,parent,false);
+-            }
++        }
+ 
+-            Inspection currentInspection=myInspection.get(position);
+ 
+-            //number of critical issue
+-            TextView criticalText=(TextView) itemView.findViewById(R.id.criticaltextview);
+-            criticalText.setText( ""+ currentInspection.getNumCritViolations());
+-
+-
+-            //number of non critical issue
+-            TextView makeText2=(TextView) itemView.findViewById(R.id.noncriticaltextview);
+-            makeText2.setText( ""+ currentInspection.getNumNonCritViolations());
+-
+-            //level of hazard
+-            TextView makeText3=(TextView) itemView.findViewById(R.id.hazardleveltextview);
+-            makeText3.setText(currentInspection.getHazardRating());
+-
+-
+-            //how long
+-
+-            return itemView;
+-            //return super.getDropDownView(position, convertView, parent);
+-        }
+-    }
+-
+-    private void populateInspectionList() {
+-        myInspection=inspectionManager.getList("SWOD-AHZUMF");
+     }
+-
+-
+-
+ }
+\ No newline at end of file
