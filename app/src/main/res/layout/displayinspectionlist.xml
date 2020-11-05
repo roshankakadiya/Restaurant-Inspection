@@ -5,13 +5,16 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ADD8E6"
     tools:context=".model.Model.ListofInspection">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"></androidx.appcompat.widget.Toolbar>
+        android:background="?attr/colorPrimary"
+        tools:ignore="MissingConstraints"
+         />
 
 
     <ListView
@@ -22,7 +25,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView"
+
+        ></ListView>
 
     <TextView
         android:id="@+id/restaurantnametextView"
