@@ -71,11 +71,18 @@ public class InspectionList extends AppCompatActivity {
 
         for(int i=0; i<myInspection.size();i++){
 
-            instype.add(myInspection.get(i).getInspectionType());
-            cricissues[i]=myInspection.get(i).getNumCritViolations();
-            noncricissues[i]=myInspection.get(i).getNumNonCritViolations();
-            hazardlevel.add(myInspection.get(i).getHazardRating());
-
+            try {
+                instype.add(myInspection.get(i).getInspectionType());
+                cricissues[i] = myInspection.get(i).getNumCritViolations();
+                noncricissues[i] = myInspection.get(i).getNumNonCritViolations();
+                hazardlevel.add(myInspection.get(i).getHazardRating());
+            }
+            catch (NullPointerException e){
+                instype.add("No Inspection Found");
+                cricissues[0]=0;
+                noncricissues[0]=0;
+                hazardlevel.add("Low");
+            }
         }
 
         MyAdapter adapter=new MyAdapter(this,instype,cricissues,noncricissues,hazardlevel);
