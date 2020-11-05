@@ -21,6 +21,8 @@ import com.example.cmpt276group05.model.Model.InspectionManager;
 import com.example.cmpt276group05.model.Model.Restaurant;
 import com.example.cmpt276group05.model.Model.RestaurantManager;
 
+import org.apache.commons.collections.ArrayStack;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class InspectionList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.displayinspectionlist);
 
-        Intent intent = getIntent();
+       /*// Intent intent = getIntent();
         String a="SWOD-APSP3X";
         //String trackingnum=intent.getStringExtra("Tracking Number",a);
 
@@ -60,9 +62,9 @@ public class InspectionList extends AppCompatActivity {
         TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
         displayrestaurantGpscord.setText(""+res.getLatitude()+","+res.getLongitude());
 
-
+*/
         inspectionManager=InspectionManager.getInstance(this);
-        myInspection=inspectionManager.getList(a);
+        myInspection=inspectionManager.getList("SWOD-APSP3X");
 
         listview=(ListView) findViewById(R.id.InspectionListview);
 
