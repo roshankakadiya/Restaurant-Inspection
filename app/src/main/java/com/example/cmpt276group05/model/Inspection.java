@@ -1,6 +1,14 @@
 package com.example.cmpt276group05.model;
 
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Data Class for Inspection
@@ -71,6 +79,31 @@ public class Inspection {
 
     public void setViolationReport(String violationReport) {
         this.violationReport = violationReport;
+    }
+
+
+    public String adjustTime(){
+
+        Date now = new Date();
+        Date inspect = inspectionDate;
+        long diffInMillies = Math.abs(inspect.getTime() - now.getTime());
+        double diffInDays = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS) / 60 / 24;
+
+        String timeInfo = "";
+
+        if (diffInDays <= 30) {
+            timeInfo = diffInDays + " days ago";
+        } else if (diffInDays <= 365) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", Locale.CANADA);
+            timeInfo = dateFormat.format(inspect);
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM YYYY", Locale.CANADA);
+            timeInfo = dateFormat.format(inspect);
+        }
+        Log.d("Test", toString());
+        Log.d("Test",String.valueOf(diffInDays));
+
+        return timeInfo;
     }
 
     @Override
