@@ -10,16 +10,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.constant.BusinessConstant;
 import com.example.cmpt276group05.model.Inspection;
 import com.example.cmpt276group05.model.InspectionManager;
 import com.example.cmpt276group05.model.Restaurant;
 import com.example.cmpt276group05.model.RestaurantManager;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,6 @@ public class InspectionList extends AppCompatActivity {
         setContentView(R.layout.displayinspectionlist);
 
         Intent intent = getIntent();
-        String a="SWOD-APSP3X";
         String trackingnum=intent.getStringExtra("Tracking_Number");
 
         restaurantManager=RestaurantManager.getInstance(this);
@@ -79,6 +82,18 @@ public class InspectionList extends AppCompatActivity {
 
 
          listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(InspectionList.this,DetailInspectionActivity.class);
+                //please put your activities name on the class above!
+               // intent.putExtra("Tracking_Number",restaurantManager.get(position).getTrackingNumber());
+             //   intent.putExtra(BusinessConstant.INSPECTION_DATA, new Gson().toJson(inspection));
+                //context.startActivity(intent);
+                startActivity(intent);
+            }
+        });
 
     }
 

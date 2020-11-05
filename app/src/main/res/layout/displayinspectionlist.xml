@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".model.Model.ListofInspection">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"></androidx.appcompat.widget.Toolbar>
+
+
     <ListView
         android:id="@+id/InspectionListview"
         android:layout_width="401dp"
@@ -27,6 +34,7 @@
         android:text="Restaurant Name"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,8 +55,8 @@
 
     <TextView
         android:id="@+id/GPScordtextview"
-        android:layout_width="202dp"
-        android:layout_height="29dp"
+        android:layout_width="303dp"
+        android:layout_height="34dp"
         android:layout_marginStart="163dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="194dp"
