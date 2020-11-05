@@ -9,13 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cmpt276group05">
-        <activity android:name="com.example.cmpt276group05.model.UI.InspectionList">
+        <activity android:name=".adapter"></activity>
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.DetailInspectionActivity"/>
     </application>
 
 </manifest>
