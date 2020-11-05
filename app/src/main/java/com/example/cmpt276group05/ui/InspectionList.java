@@ -3,9 +3,11 @@ package com.example.cmpt276group05.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +42,7 @@ public class InspectionList extends AppCompatActivity {
     int [] cricissues = new int[50] ;
     int [] noncricissues=new int[50];
     ArrayList<String> hazardlevel=new ArrayList<String>();
-    int hazardimages []={R.drawable.high,R.drawable.moderate,R.drawable.low};
+    int hazardimages []={R.drawable.high1,R.drawable.moderate1,R.drawable.low1};
     ArrayList<String> TDate= new ArrayList<String>();
 
     @Override
@@ -143,7 +145,11 @@ public class InspectionList extends AppCompatActivity {
             typeofInspection.setText(inspectionType[position]);
             numberofcricviolations.setText(""+cricviolations[position]);
             numberofnoncricviolations.setText(""+noncricviolations[position]);
+
+
             hazardl.setText(hazardlevels[position]);
+         //   hazardl.setTextColor(Color.parseColor("00ff00"));
+
             dates.setText( date[position]);
 
             if(hazardlevels[position].equals("Low")){

@@ -53,16 +53,17 @@
         android:layout_width="203dp"
         android:layout_height="28dp"
         android:layout_marginStart="168dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="191dp"
         android:text="Address"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#E81123"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView" />
 
     <TextView
         android:id="@+id/GPScordtextview"
@@ -75,11 +76,24 @@
         android:text="GPScord"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#673AB7"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/InspectionListview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addresstextView"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        app:layout_constraintTop_toBottomOf="@+id/addresstextView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="31dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginBottom="28dp"
+        android:src="@drawable/location"
+        app:layout_constraintBottom_toTopOf="@+id/GPScordtextview"
+        app:layout_constraintEnd_toStartOf="@+id/addresstextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
