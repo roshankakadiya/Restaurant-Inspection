@@ -3,9 +3,11 @@ package com.example.cmpt276group05.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +42,8 @@ public class InspectionList extends AppCompatActivity {
     int [] cricissues = new int[50] ;
     int [] noncricissues=new int[50];
     ArrayList<String> hazardlevel=new ArrayList<String>();
-    int hazardimages []={R.drawable.high,R.drawable.moderate,R.drawable.low};
-
+    int hazardimages []={R.drawable.high1,R.drawable.moderate1,R.drawable.low1};
+    ArrayList<String> TDate= new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +60,10 @@ public class InspectionList extends AppCompatActivity {
         displayrestaurantname.setText(res.getName());
 
         TextView displayrestaurantaddress=(TextView) findViewById(R.id.addresstextView);
-        displayrestaurantaddress.setText(res.getAddress());
+        displayrestaurantaddress.setText(res.getAddress() + ", " + res.getCity());
 
         TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
-        displayrestaurantGpscord.setText(""+res.getLatitude()+","+res.getLongitude());
+        displayrestaurantGpscord.setText(""+res.getLatitude()+" Latitude "+res.getLongitude()+" Longitude");
 
 
         inspectionManager=InspectionManager.getInstance(this);
@@ -71,14 +73,22 @@ public class InspectionList extends AppCompatActivity {
 
         for(int i=0; i<myInspection.size();i++){
 
-            instype.add(myInspection.get(i).getInspectionType());
-            cricissues[i]=myInspection.get(i).getNumCritViolations();
-            noncricissues[i]=myInspection.get(i).getNumNonCritViolations();
-            hazardlevel.add(myInspection.get(i).getHazardRating());
-
+            try {
+                instype.add(myInspection.get(i).getInspectionType());
+                cricissues[i] = myInspection.get(i).getNumCritViolations();
+                noncricissues[i] = myInspection.get(i).getNumNonCritViolations();
+                hazardlevel.add(myInspection.get(i).getHazardRating());
+                TDate.add(myInspection.get(i).adjustTime());
+            }
+            catch (NullPointerException e){
+                instype.add("No Inspection Found");
+                cricissues[0]=0;
+                noncricissues[0]=0;
+                hazardlevel.add("Low");
+            }
         }
 
-        MyAdapter adapter=new MyAdapter(this,instype,cricissues,noncricissues,hazardlevel);
+        MyAdapter adapter=new MyAdapter(this,instype,cricissues,noncricissues,hazardlevel,TDate);
 
 
          listview.setAdapter(adapter);
@@ -99,9 +109,10 @@ public class InspectionList extends AppCompatActivity {
         int noncricviolations[];
         String hazardlevels[];
         int hazarimg[];
+        String date[];
 
 
-        MyAdapter(Context c,ArrayList <String> type,int numcricviolations[],int numnoncricviolations[],ArrayList <String> hazardstring){
+        MyAdapter(Context c,ArrayList <String> type,int numcricviolations[],int numnoncricviolations[],ArrayList <String> hazardstring,ArrayList<String> date){
             super(c,R.layout.rowofinspection,R.id.instypetextview,type);
             this.context=c;
             this.inspectionType=type.toArray(new String[0]);
@@ -109,6 +120,7 @@ public class InspectionList extends AppCompatActivity {
             this.noncricviolations=noncricissues;
             this.hazardlevels=hazardstring.toArray(new String[0]);
             this.hazarimg=hazardimages;
+            this.date = TDate.toArray(new String[0]);
 
 
         }
@@ -123,11 +135,17 @@ public class InspectionList extends AppCompatActivity {
             TextView numberofnoncricviolations=row.findViewById(R.id.noncriticalissuetextview);
             TextView hazardl=row.findViewById(R.id.hazardlevltextview);
             ImageView HazardIcons =  row.findViewById(R.id.hazardicon);
+            TextView dates = row.findViewById(R.id.datetextview);
 
             typeofInspection.setText(inspectionType[position]);
             numberofcricviolations.setText(""+cricviolations[position]);
             numberofnoncricviolations.setText(""+noncricviolations[position]);
+
+
             hazardl.setText(hazardlevels[position]);
+         //   hazardl.setTextColor(Color.parseColor("00ff00"));
+
+            dates.setText( date[position]);
 
             if(hazardlevels[position].equals("Low")){
                 HazardIcons.setImageResource(hazarimg[2]);

@@ -5,13 +5,15 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ADD8E6"
     tools:context=".model.Model.ListofInspection">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"></androidx.appcompat.widget.Toolbar>
+        android:background="?attr/colorPrimary"
+        tools:ignore="MissingConstraints" />
 
 
     <ListView
@@ -19,10 +21,14 @@
         android:layout_width="401dp"
         android:layout_height="526dp"
         android:layout_marginTop="160dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView"
+
+        ></ListView>
 
     <TextView
         android:id="@+id/restaurantnametextView"
@@ -35,6 +41,8 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,30 +51,61 @@
         android:id="@+id/addresstextView"
         android:layout_width="203dp"
         android:layout_height="28dp"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="191dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="115dp"
         android:text="Address"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#E81123"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantnametextView" />
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
         android:id="@+id/GPScordtextview"
-        android:layout_width="303dp"
-        android:layout_height="34dp"
+        android:layout_width="302dp"
+        android:layout_height="60dp"
         android:layout_marginStart="163dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="194dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="40dp"
         android:text="GPScord"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#673AB7"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/InspectionListview"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addresstextView" />
+        app:layout_constraintTop_toBottomOf="@+id/addresstextView"
+        app:layout_constraintVertical_bias="0.905" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="31dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/location"
+        app:layout_constraintEnd_toStartOf="@+id/addresstextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="127dp"
+        android:layout_marginBottom="9dp"
+        android:text="Inspection Report"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/InspectionListview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GPScordtextview"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
