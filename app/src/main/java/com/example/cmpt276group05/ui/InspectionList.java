@@ -86,12 +86,7 @@ public class InspectionList extends AppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(InspectionList.this,DetailInspectionActivity.class);
-                //please put your activities name on the class above!
-               // intent.putExtra("Tracking_Number",restaurantManager.get(position).getTrackingNumber());
-             //   intent.putExtra(BusinessConstant.INSPECTION_DATA, new Gson().toJson(inspection));
-                //context.startActivity(intent);
-                startActivity(intent);
+                DetailInspectionActivity.goToInspectionDetail(InspectionList.this,InspectionManager.get(position));
             }
         });
 
