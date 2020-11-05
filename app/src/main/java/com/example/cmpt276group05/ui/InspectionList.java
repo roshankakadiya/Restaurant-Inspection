@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class InspectionList extends AppCompatActivity {
     private InspectionManager inspectionManager;
     private List<Inspection> myInspection=new ArrayList<Inspection>();
 
+    Button backBtn;
     ListView listview;
     ArrayList<String> instype=new ArrayList<String>();
     int [] cricissues = new int[50] ;
@@ -97,6 +99,17 @@ public class InspectionList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DetailInspectionActivity.goToInspectionDetail(InspectionList.this,InspectionManager.get(position));
+            }
+        });
+
+
+        //back button
+        backBtn=findViewById(R.id.backbutton);
+
+        backBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                startActivity(new Intent(InspectionList.this,MainActivity.class));
             }
         });
 

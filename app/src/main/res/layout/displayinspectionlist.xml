@@ -108,4 +108,15 @@
         app:layout_constraintTop_toBottomOf="@+id/GPScordtextview"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="48dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="45dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/abc_vector_test"
+        app:layout_constraintEnd_toStartOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
