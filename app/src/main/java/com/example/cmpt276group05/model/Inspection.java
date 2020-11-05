@@ -94,10 +94,10 @@ public class Inspection {
         if (diffInDays <= 30) {
             timeInfo = diffInDays + " days ago";
         } else if (diffInDays <= 365) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd", Locale.CANADA);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", Locale.CANADA);
             timeInfo = dateFormat.format(inspect);
         } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM YYYY", Locale.CANADA);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM YYYY", Locale.CANADA);
             timeInfo = dateFormat.format(inspect);
         }
         Log.d("Test", toString());

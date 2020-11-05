@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar1 = getSupportActionBar();
         actionbar1.setTitle("Surrey Restaurant Inspection");
 
-        restaurantManager = RestaurantManager.getInstance(this);
-        inspectionManager = InspectionManager.getInstance(this);
+        restaurantManager = RestaurantManager.getInstance(getApplicationContext());
+        inspectionManager = InspectionManager.getInstance(getApplicationContext());
 
         ListView listview = (ListView) findViewById(R.id.list);
 
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
                 resIcon.setImageResource(images[position]);
                 name.setText(Name[position]);
-                dates.setText(date[position]);
+                dates.setText("Latest inspection:\n" + date[position]);
                 issues.setText("# of issues found: " + issue[position]);
 
                 if(hazardC[position].equals("Low")){
