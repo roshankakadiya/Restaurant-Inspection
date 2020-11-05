@@ -1,4 +1,4 @@
-package com.example.cmpt276group05.model.Model;
+package com.example.cmpt276group05.model;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,8 +21,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /*
  * Manager for Inspection objects. Has methods for sorting and adding/ deleting inspections

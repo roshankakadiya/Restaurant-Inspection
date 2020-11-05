@@ -1,4 +1,4 @@
-package com.example.cmpt276group05.model.UI;
+package com.example.cmpt276group05.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,12 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.cmpt276group05.R;
-import com.example.cmpt276group05.model.Model.Inspection;
-import com.example.cmpt276group05.model.Model.InspectionManager;
-import com.example.cmpt276group05.model.Model.Restaurant;
-import com.example.cmpt276group05.model.Model.RestaurantManager;
-
-import org.apache.commons.collections.ArrayStack;
+import com.example.cmpt276group05.model.Inspection;
+import com.example.cmpt276group05.model.InspectionManager;
+import com.example.cmpt276group05.model.Restaurant;
+import com.example.cmpt276group05.model.RestaurantManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +44,12 @@ public class InspectionList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.displayinspectionlist);
 
-       /*// Intent intent = getIntent();
+        Intent intent = getIntent();
         String a="SWOD-APSP3X";
-        //String trackingnum=intent.getStringExtra("Tracking Number",a);
+        String trackingnum=intent.getStringExtra("Tracking_Number");
 
         restaurantManager=RestaurantManager.getInstance(this);
-        res=restaurantManager.getByTrackingNumber(a);
+        res=restaurantManager.getByTrackingNumber(trackingnum);
 
         TextView displayrestaurantname=(TextView) findViewById(R.id.restaurantnametextView);
         displayrestaurantname.setText(res.getName());
@@ -62,9 +60,9 @@ public class InspectionList extends AppCompatActivity {
         TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
         displayrestaurantGpscord.setText(""+res.getLatitude()+","+res.getLongitude());
 
-*/
+
         inspectionManager=InspectionManager.getInstance(this);
-        myInspection=inspectionManager.getList("SWOD-APSP3X");
+        myInspection=inspectionManager.getList(trackingnum);
 
         listview=(ListView) findViewById(R.id.InspectionListview);
 

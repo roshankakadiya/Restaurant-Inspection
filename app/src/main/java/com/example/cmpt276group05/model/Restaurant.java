@@ -1,4 +1,4 @@
-package com.example.cmpt276group05.model.Model;
+package com.example.cmpt276group05.model;
 
 /*
  * Data Class for Restaurant

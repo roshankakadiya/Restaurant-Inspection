@@ -1,4 +1,4 @@
-package com.example.cmpt276group05.model.Model;
+package com.example.cmpt276group05.model;
 
 import android.util.Log;
 

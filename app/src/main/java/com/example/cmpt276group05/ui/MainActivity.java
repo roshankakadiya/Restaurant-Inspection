@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this,"Selected",Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(MainActivity.this,PUTYOURACTIVITYNAMEHERE.class);
+                Intent intent = new Intent(MainActivity.this,InspectionList.class);
                 //please put your activities name on the class above!
-//                intent.putextra("Tracking_Number",restaurantManager.get(position).getTrackingNumber());
-//                  startActivity(intent);
+                intent.putExtra("Tracking_Number",restaurantManager.get(position).getTrackingNumber());
+                startActivity(intent);
             }
         });
 
