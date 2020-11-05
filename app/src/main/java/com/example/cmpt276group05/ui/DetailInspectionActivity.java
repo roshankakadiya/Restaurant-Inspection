@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.adapter.ViolationAdapter;
@@ -34,7 +35,7 @@ public class DetailInspectionActivity extends AppCompatActivity {
     private SimpleDateFormat sfd = new SimpleDateFormat ("MMM dd,yyyy", Locale.UK);
     private ViolationAdapter violationAdapter;
     private List<Violation> violationEntities;
-
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class DetailInspectionActivity extends AppCompatActivity {
         tvCritical = findViewById(R.id.tv_critical);
         tvHazard = findViewById(R.id.tv_hazard);
         lvViolations = findViewById(R.id.lv_violation);
+        toolbar = findViewById(R.id.toolbar);
     }
 
     /*
@@ -105,6 +107,13 @@ public class DetailInspectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(DetailInspectionActivity.this,violationEntities.get(i).getDesc(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
