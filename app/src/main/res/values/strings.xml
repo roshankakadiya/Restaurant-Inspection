@@ -14,4 +14,7 @@
     <string name="inspection_type">Type</string>
     <string name="inspection_critical">Critical/No Critical</string>
     <string name="inspection_hazard">HazardRating</string>
+    <string name="address">Address</string>
+    <string name="gpscord">GPScord</string>
+    <string name="inspection_report">Inspection Report</string>
 </resources>
