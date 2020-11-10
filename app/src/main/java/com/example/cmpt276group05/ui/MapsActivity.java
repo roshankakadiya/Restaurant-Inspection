@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.model.InspectionManager;
+import com.example.cmpt276group05.model.RestaurantManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,7 +33,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+/*
+ * UI for mapsActivity
+ */
+
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private RestaurantManager restaurantManager;
+    private InspectionManager inspectionManager;
 
     // Src: CodingWithMitch Tutorial - https://youtu.be/Vt6H9TOmsuo
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -51,6 +61,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         Toolbar toolbar = findViewById(R.id.map_toolbar);
         setSupportActionBar(toolbar);
+
+        restaurantManager = RestaurantManager.getInstance(getApplicationContext());
+        inspectionManager = InspectionManager.getInstance(getApplicationContext());
+
         getLocationPermission();
     }
 
@@ -70,7 +84,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
+            populateMarkers();
 
         }
     }
@@ -141,6 +155,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void initMap(){
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapsActivity.this);
+
+    }
+
+    private void populateMarkers() {
+        for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {
+            String name = restaurantManager.get(x).getName();
+            double latitude = restaurantManager.get(x).getLatitude();
+            double longitude = restaurantManager.get(x).getLongitude();
+            MarkerOptions options = new MarkerOptions()
+                    .position(new LatLng(latitude,longitude))
+                    .title(name);
+            mMap.addMarker(options);
+            Log.d("populate", restaurantManager.get(x).toString());
+        }
     }
 
     private void getLocationPermission(){
