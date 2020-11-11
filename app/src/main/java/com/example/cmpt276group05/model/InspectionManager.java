@@ -120,7 +120,7 @@ public class InspectionManager implements Iterable<Inspection>{
             }
 
             BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(is, StandardCharsets.ISO_8859_1)
+                    new InputStreamReader(is, StandardCharsets.UTF_8)
             );
             CSVReader csvReader = new CSVReader(reader);
 
