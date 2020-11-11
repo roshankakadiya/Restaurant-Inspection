@@ -6,51 +6,55 @@
 
 package com.example.cmpt276group05.ui;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.DynamicLayout;
-import android.text.Layout;
-import android.text.style.DynamicDrawableSpan;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.core.app.ActivityCompat;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.constant.BusinessConstant;
 import com.example.cmpt276group05.model.Inspection;
 import com.example.cmpt276group05.model.InspectionManager;
 import com.example.cmpt276group05.model.Restaurant;
+import com.example.cmpt276group05.model.RestaurantEntry;
 import com.example.cmpt276group05.model.RestaurantManager;
+import com.example.cmpt276group05.net.ApiService;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.chrono.ThaiBuddhistDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private RestaurantManager restaurantManager;
@@ -117,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getUpdateData();
     }//onCreate
 
 
@@ -125,8 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         class arrayAdapter extends ArrayAdapter<String> {
-
-
             Context context;
             String Name[];
             String issue[];
@@ -176,4 +179,42 @@ public class MainActivity extends AppCompatActivity {
                 return view;
             }
         }//arrayAdapter
+
+    //get updated data
+    private void getUpdateData(){
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .addInterceptor(new LogCatInterceptor())
+                .build();
+        Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(BusinessConstant.GET_RESTAURANT_URL);
+        builder.addConverterFactory(GsonConverterFactory.create());
+        builder.client(okHttpClient);
+        builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+        Retrofit retrofit = builder.build();
+        ApiService apiService =  retrofit.create(ApiService.class);
+
+        Call<RestaurantEntry> call = apiService.getData("restaurants");
+
+        call.enqueue(new Callback<RestaurantEntry>() {
+            @Override
+            public void onResponse(Call<RestaurantEntry> call, Response<RestaurantEntry> response) {
+                Log.i("aaa",response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantEntry> call, Throwable t) {
+
+            }
+        });
+    }
+
+    class LogCatInterceptor implements Interceptor {
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
+            return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY).intercept(chain);
+        }
+    }
 }//class

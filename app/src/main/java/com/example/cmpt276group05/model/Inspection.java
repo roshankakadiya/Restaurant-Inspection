@@ -23,8 +23,6 @@ public class Inspection {
     private String hazardRating;
     private String violationReport;
 
-
-
     public String getTrackingNumber() {
         return trackingNumber;
     }
