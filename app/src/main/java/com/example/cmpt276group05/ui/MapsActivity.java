@@ -20,7 +20,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.adapter.CustomInfoWindowAdapter;
+import com.example.cmpt276group05.model.Inspection;
 import com.example.cmpt276group05.model.InspectionManager;
+import com.example.cmpt276group05.model.Restaurant;
 import com.example.cmpt276group05.model.RestaurantManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -160,14 +163,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void populateMarkers() {
         for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {
-            String name = restaurantManager.get(x).getName();
-            double latitude = restaurantManager.get(x).getLatitude();
-            double longitude = restaurantManager.get(x).getLongitude();
+            Restaurant restaurant = restaurantManager.get(x);
+            String name = restaurant.getName();
+            String address = restaurant.getAddress();
+
+            double latitude = restaurant.getLatitude();
+            double longitude = restaurant.getLongitude();
+            mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MapsActivity.this));
+
+            String snippet;
+
+            try {
+                String hazardLevelMostRecent = inspectionManager
+                        .getMostRecentInspection(restaurant.getTrackingNumber())
+                        .getHazardRating();
+                snippet = address + "\n" + "Hazard level of most recent inspection: " + hazardLevelMostRecent.toUpperCase();
+            } catch (NullPointerException e) {
+                snippet = address + " - No inspection found";
+            }
             MarkerOptions options = new MarkerOptions()
                     .position(new LatLng(latitude,longitude))
-                    .title(name);
+                    .title(name)
+                    .snippet(snippet);
             mMap.addMarker(options);
-            Log.d("populate", restaurantManager.get(x).toString());
+            Log.d("populate", restaurant.toString());
         }
     }
 
