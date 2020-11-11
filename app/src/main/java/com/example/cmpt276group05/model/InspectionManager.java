@@ -1,13 +1,18 @@
 package com.example.cmpt276group05.model;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.constant.BusinessConstant;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -70,7 +75,7 @@ public class InspectionManager implements Iterable<Inspection>{
         boolean foundCluster = false;
         boolean endOfCluster = false;
         int index = 0;
-        while (!foundCluster || !endOfCluster) {
+        while ((!foundCluster || !endOfCluster) && index<inspectionList.size()) {
             if (inspectionList.get(index).getTrackingNumber().equals(trackingNumber)) {
                 listOfInspections.add(inspectionList.get(index));
                 foundCluster = true;
@@ -100,15 +105,25 @@ public class InspectionManager implements Iterable<Inspection>{
     }
 
     private static void readInspectionData() {
-        InputStream is = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, StandardCharsets.UTF_8)
-        );
-        CSVReader csvReader = new CSVReader(reader);
-
         String[] line = new String[7];
-
         try {
+
+            InputStream is=context.getResources().openRawResource(R.raw.inspectionreports_itr1);
+            File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+
+                    BusinessConstant.INSPECTION_CSV_FILE_PATH);
+            if(file.exists()){
+                try {
+                    is = new FileInputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(is, StandardCharsets.ISO_8859_1)
+            );
+            CSVReader csvReader = new CSVReader(reader);
+
             // Skip over header
             csvReader.readNext();
 

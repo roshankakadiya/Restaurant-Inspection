@@ -1,11 +1,15 @@
 package com.example.cmpt276group05.model;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.cmpt276group05.R;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import com.example.cmpt276group05.constant.BusinessConstant;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -84,15 +90,23 @@ public class RestaurantManager implements Iterable<Restaurant>{
     }
 
     private static void readRestaurantData() {
-        InputStream is = context.getResources().openRawResource(R.raw.restaurants_itr1);
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, StandardCharsets.UTF_8)
-        );
-        CSVReader csvReader = new CSVReader(reader);
-
         String[] line = new String[7];
-
         try {
+            InputStream is=context.getResources().openRawResource(R.raw.restaurants_itr1);
+            File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+
+                    BusinessConstant.RESTAURANT_CSV_FILE_PATH);
+            if(file.exists()){
+                try {
+                    is = new FileInputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(is, StandardCharsets.UTF_8)
+            );
+            CSVReader csvReader = new CSVReader(reader);
+
             // Skip over header
             csvReader.readNext();
 
