@@ -52,4 +52,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
         renderWindowText(marker, mWindow);
         return mWindow;
     }
+
+
 }

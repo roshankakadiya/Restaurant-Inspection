@@ -32,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -126,22 +127,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+
+
     private void getGPSLocation() {
         mLocation = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (mLocationPermissionsGranted) {
                 Task location = mLocation.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Location current = (Location) task.getResult();
-                            if (current != null) {
-                                moveCamera(new LatLng(current.getLatitude(), current.getLongitude()), DEFAULT_ZOOM);
-                            }
-                        } else {
-                            Toast.makeText(MapsActivity.this, "Cannot get current location", Toast.LENGTH_SHORT).show();
+                location.addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Location current = (Location) task.getResult();
+                        if (current != null) {
+                            moveCamera(new LatLng(current.getLatitude(), current.getLongitude()), DEFAULT_ZOOM);
                         }
+                    } else {
+                        Toast.makeText(MapsActivity.this, "Cannot get current location", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -181,12 +181,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (NullPointerException e) {
                 snippet = address + " - No inspection found";
             }
-            MarkerOptions options = new MarkerOptions()
+            Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(latitude,longitude))
                     .title(name)
-                    .snippet(snippet);
-            mMap.addMarker(options);
-            Log.d("populate", restaurant.toString());
+                    .snippet(snippet));
+            String trackingNumber = restaurant.getTrackingNumber();
+            marker.setTag(trackingNumber);
+            mMap.setOnInfoWindowClickListener(marker1 -> {
+                Intent intent = new Intent(MapsActivity.this, InspectionList.class);
+                String trackingNumber1 = marker1.getTag().toString();
+                intent.putExtra("Tracking_Number", trackingNumber1);
+                startActivity(intent);
+            });
         }
     }
 
@@ -211,8 +217,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-
-
-
-
 }
