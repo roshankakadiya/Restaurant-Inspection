@@ -12,6 +12,10 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +35,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -172,19 +178,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MapsActivity.this));
 
             String snippet;
+            Marker marker;
+
+
 
             try {
                 String hazardLevelMostRecent = inspectionManager
                         .getMostRecentInspection(restaurant.getTrackingNumber())
                         .getHazardRating();
                 snippet = address + "\n" + "Hazard level of most recent inspection: " + hazardLevelMostRecent.toUpperCase();
+                int resourceID = 0;
+                switch (hazardLevelMostRecent) {
+                    case "Low":
+                        resourceID = R.drawable.low_bmp;
+                        break;
+                    case "Moderate":
+                        resourceID = R.drawable.mid_bmp;
+                        break;
+                    case "High":
+                        resourceID = R.drawable.high_bmp;
+                        break;
+                }
+
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceID);
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude,longitude))
+                        .title(name)
+                        .snippet(snippet)
+                        .icon(bitmapDescriptor));
+            // Null occurs when there is no inspection available - use a default peg instead of custom icon
             } catch (NullPointerException e) {
                 snippet = address + " - No inspection found";
+                marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude,longitude))
+                        .title(name)
+                        .snippet(snippet));
             }
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(latitude,longitude))
-                    .title(name)
-                    .snippet(snippet));
+
             String trackingNumber = restaurant.getTrackingNumber();
             marker.setTag(trackingNumber);
             mMap.setOnInfoWindowClickListener(marker1 -> {
