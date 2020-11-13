@@ -53,6 +53,7 @@ import java.time.chrono.ThaiBuddhistDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private RestaurantManager restaurantManager;
@@ -168,7 +169,10 @@ public class MainActivity extends AppCompatActivity {
             TextView issues = view.findViewById(R.id.issue);
             TextView hazardcolors = view.findViewById(R.id.hazardcolor);
             ImageView HazardIcons =  view.findViewById(R.id.hazardicon);
-            resIcon.setImageResource(images[position]);
+
+
+            Random random = new Random();
+            resIcon.setImageResource(images[random.nextInt(8)]);
             name.setText(Name[position]);
             dates.setText("Latest inspection:\n" + date[position]);
             issues.setText("# of issues found: " + issue[position]);
