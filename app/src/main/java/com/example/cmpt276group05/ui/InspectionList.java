@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.callback.ParseFinishListener;
 import com.example.cmpt276group05.constant.BusinessConstant;
 import com.example.cmpt276group05.model.Inspection;
 import com.example.cmpt276group05.model.InspectionManager;
@@ -52,6 +53,7 @@ public class InspectionList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.displayinspectionlist);
 
+
         Intent intent = getIntent();
         String trackingnum=intent.getStringExtra("Tracking_Number");
 
@@ -67,41 +69,48 @@ public class InspectionList extends AppCompatActivity {
         TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
         displayrestaurantGpscord.setText(""+res.getLatitude()+" Latitude "+res.getLongitude()+" Longitude");
 
-
-        inspectionManager=InspectionManager.getInstance(this);
-        myInspection=inspectionManager.getList(trackingnum);
-
         listview=(ListView) findViewById(R.id.InspectionListview);
 
-        for(int i=0; i<myInspection.size();i++){
+        MyAdapter adapter=new MyAdapter(this,instype);
 
-            try {
-                instype.add(myInspection.get(i).getInspectionType());
-                cricissues[i] = myInspection.get(i).getNumCritViolations();
-                noncricissues[i] = myInspection.get(i).getNumNonCritViolations();
-                hazardlevel.add(myInspection.get(i).getHazardRating());
-                TDate.add(myInspection.get(i).adjustTime());
-            }
-            catch (NullPointerException e){
-                instype.add("No Inspection Found");
-                cricissues[0]=0;
-                noncricissues[0]=0;
-                hazardlevel.add("Low");
-            }
-        }
-
-        MyAdapter adapter=new MyAdapter(this,instype,cricissues,noncricissues,hazardlevel,TDate);
-
-
-         listview.setAdapter(adapter);
+        listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DetailInspectionActivity.goToInspectionDetail(InspectionList.this,InspectionManager.get(position));
+                DetailInspectionActivity.goToInspectionDetail(InspectionList.this,myInspection.get(position));
             }
         });
 
+        inspectionManager=InspectionManager.getInstance(this);
+        inspectionManager.initData(new ParseFinishListener() {
+            @Override
+            public void onFinish() {
+                myInspection=inspectionManager.getList(trackingnum);
+                for(int i=0; i<myInspection.size();i++){
+                    try {
+                        instype.add(myInspection.get(i).getInspectionType());
+                        cricissues[i] = myInspection.get(i).getNumCritViolations();
+                        noncricissues[i] = myInspection.get(i).getNumNonCritViolations();
+                        hazardlevel.add(myInspection.get(i).getHazardRating());
+                        TDate.add(myInspection.get(i).adjustTime());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                    catch (NullPointerException e){
+                        instype.add("No Inspection Found");
+                        cricissues[0]=0;
+                        noncricissues[0]=0;
+                        hazardlevel.add("Low");
+                    }
+                }
+
+            }
+        });
 
         //back button
         backBtn=findViewById(R.id.backbutton);
@@ -109,33 +118,16 @@ public class InspectionList extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                startActivity(new Intent(InspectionList.this,MainActivity.class));
+                finish();
             }
         });
 
     }
 
     class MyAdapter extends ArrayAdapter<String>{
-        Context context;
-        String inspectionType[];
-        int cricviolations [];
-        int noncricviolations[];
-        String hazardlevels[];
-        int hazarimg[];
-        String date[];
 
-
-        MyAdapter(Context c,ArrayList <String> type,int numcricviolations[],int numnoncricviolations[],ArrayList <String> hazardstring,ArrayList<String> date){
+        MyAdapter(Context c,ArrayList <String> type){
             super(c,R.layout.rowofinspection,R.id.instypetextview,type);
-            this.context=c;
-            this.inspectionType=type.toArray(new String[0]);
-            this.cricviolations=cricissues;
-            this.noncricviolations=noncricissues;
-            this.hazardlevels=hazardstring.toArray(new String[0]);
-            this.hazarimg=hazardimages;
-            this.date = TDate.toArray(new String[0]);
-
-
         }
 
         @NonNull
@@ -150,27 +142,23 @@ public class InspectionList extends AppCompatActivity {
             ImageView HazardIcons =  row.findViewById(R.id.hazardicon);
             TextView dates = row.findViewById(R.id.datetextview);
 
-            typeofInspection.setText(inspectionType[position]);
-            numberofcricviolations.setText(""+cricviolations[position]);
-            numberofnoncricviolations.setText(""+noncricviolations[position]);
+            typeofInspection.setText(instype.get(position));
+            numberofcricviolations.setText(""+cricissues[position]);
+            numberofnoncricviolations.setText(""+noncricissues[position]);
 
 
-            hazardl.setText(hazardlevels[position]);
+            hazardl.setText(hazardlevel.get(position));
          //   hazardl.setTextColor(Color.parseColor("00ff00"));
 
-            dates.setText( date[position]);
+            dates.setText(TDate.get(position));
 
-            if(hazardlevels[position].equals("Low")){
-                HazardIcons.setImageResource(hazarimg[2]);
-            }else if (hazardlevels[position].equals("Moderate")){
-                HazardIcons.setImageResource(hazarimg[1]);
-            }else if(hazardlevels[position].equals("High")){
-                HazardIcons.setImageResource(hazarimg[0]);
+            if(hazardlevel.get(position).equals("Low")){
+                HazardIcons.setImageResource(hazardimages[2]);
+            }else if (hazardlevel.get(position).equals("Moderate")){
+                HazardIcons.setImageResource(hazardimages[1]);
+            }else if(hazardlevel.get(position).equals("High")){
+                HazardIcons.setImageResource(hazardimages[0]);
             }
-
-
-
-
             return row;
         }
     }

@@ -131,10 +131,21 @@ public class DetailInspectionActivity extends AppCompatActivity {
         for(String violation : violations){
             Violation violationEntity = new Violation();
             String[] ps = violation.split(",");
-            violationEntity.setCode(ps[0]);
-            violationEntity.setCirtical(ps[1]);
-            violationEntity.setDesc(ps[2]);
-            violationEntity.setRepeat(ps[3]);
+            if(ps.length>0){
+                violationEntity.setCode(ps[0]);
+            }
+            if(ps.length>1){
+                violationEntity.setCirtical(ps[1]);
+            }
+
+            if(ps.length>2){
+                violationEntity.setDesc(ps[2]);
+            }
+
+            if(ps.length>3){
+                violationEntity.setRepeat(ps[3]);
+            }
+
             violationEntities.add(violationEntity);
         }
         return violationEntities;

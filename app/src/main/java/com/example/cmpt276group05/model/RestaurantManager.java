@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import com.example.cmpt276group05.callback.ParseFinishListener;
 import com.example.cmpt276group05.constant.BusinessConstant;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -32,7 +35,9 @@ public class RestaurantManager implements Iterable<Restaurant>{
 
     private static List<Restaurant> restaurantList = new ArrayList<>();
     private static Context context;
+    final private ExecutorService pool = Executors.newFixedThreadPool(1);
     // Allows access to files
+    private boolean isInited = false;
 
     @Override
     public Iterator<Restaurant> iterator() {
@@ -50,16 +55,34 @@ public class RestaurantManager implements Iterable<Restaurant>{
         if (instance == null) {
             instance = new RestaurantManager();
             context = ctx.getApplicationContext();
-            readRestaurantData();
+        }else{
+            context = ctx.getApplicationContext();
         }
-        sortArrayList();
 
         return instance;
     }
 
+    public void initData(ParseFinishListener parseFinishListener){
+        if(!isInited){
+            pool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    readRestaurantData();
+                    sortArrayList();
+                    if(parseFinishListener!=null){
+                        parseFinishListener.onFinish();
+                    }
+                    isInited = true;
+                }
+            });
+        }else{
+            if(parseFinishListener!=null){
+                parseFinishListener.onFinish();
+            }
+        }
+    }
 
-
-    public static void sortArrayList() {
+    public void sortArrayList() {
         Collections.sort(restaurantList, (restaurant, t1) -> restaurant.getName().compareTo(t1.getName()));
     }
 
@@ -129,5 +152,9 @@ public class RestaurantManager implements Iterable<Restaurant>{
             e.printStackTrace();
         }
 
+    }
+
+    public void setInited(boolean inited) {
+        isInited = inited;
     }
 }

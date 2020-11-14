@@ -10,7 +10,7 @@ public class BaseDialog extends Dialog {
     private int layoutUri;
 
     public BaseDialog(Context context, int layoutUri) {
-        super(context, R.style.Theme_AppCompat);
+        super(context, R.style.AppDialogTheme);
         this.layoutUri = layoutUri;
     }
 
