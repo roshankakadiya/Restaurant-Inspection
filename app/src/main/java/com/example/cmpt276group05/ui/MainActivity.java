@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         cancelDialog = new BaseDialog(this,R.layout.dialog_cancel);
     }
 
-<<<<<<< app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             View view = layoutinflater.inflate(R.layout.customview,parent,false);
             DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
             ImageView resIcon =  view.findViewById(R.id.image);
-=======
+
     private void initData(boolean force){
         inspectionManager = InspectionManager.getInstance(getApplicationContext());
 
@@ -265,12 +265,12 @@ public class MainActivity extends AppCompatActivity {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
             ImageView resIcon = view.findViewById(R.id.image);
->>>>>>> app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+
             TextView name = view.findViewById(R.id.name);
             TextView dates = view.findViewById(R.id.date);
             TextView issues = view.findViewById(R.id.issue);
             TextView hazardcolors = view.findViewById(R.id.hazardcolor);
-<<<<<<< app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+
             ImageView HazardIcons =  view.findViewById(R.id.hazardicon);
 
 
@@ -285,31 +285,15 @@ public class MainActivity extends AppCompatActivity {
                 HazardIcons.setImageResource(hazardI[1]);
             }else if(hazardC[position].equals("High")){
                 HazardIcons.setImageResource(hazardI[2]);
-=======
-            ImageView HazardIcons = view.findViewById(R.id.hazardicon);
 
-            resIcon.setImageResource(images[position % 4]);
-            name.setText(TName.get(position));
-            dates.setText("Latest inspection:\n" + TDate.get(position));
-            issues.setText("# of issues found: " + TIssue.get(position));
-
-            if (THazardC.get(position).equals("Low")) {
-                HazardIcons.setImageResource(THazardI[0]);
-            } else if (THazardC.get(position).equals("Moderate")) {
-                HazardIcons.setImageResource(THazardI[1]);
-            } else if (THazardC.get(position).equals("High")) {
-                HazardIcons.setImageResource(THazardI[2]);
->>>>>>> app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
             }
 
             return view;
         }
     }//arrayAdapter
 
-<<<<<<< app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
-=======
     //get updated data
-    private void confirmUpdate() {
+    private void confirmUpdate(){
         //restaurant data
         final Retrofit retrofit = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
         Call<RestaurantEntry> call = retrofit.create(ApiService.class).getData(BusinessConstant.API_RESTAURANT);
@@ -364,77 +348,77 @@ public class MainActivity extends AppCompatActivity {
     /*
      * get restaurant csv file
      * */
-    private void getRestaurantData(Response<RestaurantEntry> restaurantEntryResponse) {
-        //restaurant data
-        if (restaurantEntryResponse.body().getResult().getResources() != null && restaurantEntryResponse.body().getResult().getResources().size() > 0) {
-            //get csv file
-            for (RestaurantEntry.ResultBean.ResourcesBean resourcesBean : restaurantEntryResponse.body().getResult().getResources()) {
-                if (resourcesBean.getFormat().equals(BusinessConstant.CSV_FORMAT)) {
-                    String url = resourcesBean.getUrl();
-                    Log.i(TAG, url);
+            private void getRestaurantData(Response<RestaurantEntry> restaurantEntryResponse) {
+                //restaurant data
+                if (restaurantEntryResponse.body().getResult().getResources() != null && restaurantEntryResponse.body().getResult().getResources().size() > 0) {
+                    //get csv file
+                    for (RestaurantEntry.ResultBean.ResourcesBean resourcesBean : restaurantEntryResponse.body().getResult().getResources()) {
+                        if (resourcesBean.getFormat().equals(BusinessConstant.CSV_FORMAT)) {
+                            String url = resourcesBean.getUrl();
+                            Log.i(TAG, url);
 
-                    Retrofit retrofit1 = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
+                            Retrofit retrofit1 = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadDialog.show();
-                            loadDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                            runOnUiThread(new Runnable() {
                                 @Override
-                                public void onClick(View v) {
-                                    cancelDialog.show();
-                                    initCancelDialogEvent();
+                                public void run() {
+                                    loadDialog.show();
+                                    loadDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            cancelDialog.show();
+                                            initCancelDialogEvent();
+                                        }
+                                    });
                                 }
                             });
+
+                            int start = url.indexOf(BusinessConstant.DATA_SET);
+                            if (start != -1) {
+                                String param = url.substring(start);
+                                restaurantCall = retrofit1.create(ApiService.class).download(param);
+                                restaurantCall.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        FileUtils.generateCsvFileFromStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_TEMP_FILE_PATH,
+                                                response.body().byteStream(), response.body().contentLength(),
+                                                new DownloadListener() {
+                                                    @Override
+                                                    public void onStart() {
+
+
+                                                    }
+
+                                                    @Override
+                                                    public void onProgress(int progress) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onFinish(String path) {
+                                                        getInspectionData(restaurantEntryResponse);
+                                                    }
+
+                                                    @Override
+                                                    public void onFail(String errorInfo) {
+                                                        loadDialog.dismiss();
+                                                        Toast.makeText(MainActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        loadDialog.dismiss();
+                                        Toast.makeText(MainActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                            break;
                         }
-                    });
-
-                    int start = url.indexOf(BusinessConstant.DATA_SET);
-                    if (start != -1) {
-                        String param = url.substring(start);
-                        restaurantCall = retrofit1.create(ApiService.class).download(param);
-                        restaurantCall.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                FileUtils.generateCsvFileFromStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_TEMP_FILE_PATH,
-                                        response.body().byteStream(), response.body().contentLength(),
-                                        new DownloadListener() {
-                                            @Override
-                                            public void onStart() {
-
-
-                                            }
-
-                                            @Override
-                                            public void onProgress(int progress) {
-
-                                            }
-
-                                            @Override
-                                            public void onFinish(String path) {
-                                                getInspectionData(restaurantEntryResponse);
-                                            }
-
-                                            @Override
-                                            public void onFail(String errorInfo) {
-                                                loadDialog.dismiss();
-                                                Toast.makeText(MainActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                loadDialog.dismiss();
-                                Toast.makeText(MainActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
-                    break;
                 }
             }
-        }
-    }
 
     private void getInspectionData(Response<RestaurantEntry> restaurantEntryResponse) {
         final Retrofit retrofit = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
@@ -538,5 +522,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
->>>>>>> app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
 }//class
