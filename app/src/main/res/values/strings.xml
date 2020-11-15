@@ -19,6 +19,9 @@
     <string name="address">Address</string>
     <string name="gpscord">GPScord</string>
     <string name="inspection_report">Inspection Report</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="map">map</string>
+    <string name="list">list</string>
     <string name="update_confirm_title">Confirm to Update</string>
     <string name="cancel_confirm_title">Confirm to Cancel</string>
     <string name="update_confirm_content">It has been 20 hours since the last update, do you want to update the data?</string>

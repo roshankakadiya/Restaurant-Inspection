@@ -15,6 +15,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,7 +55,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import okhttp3.Interceptor;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -76,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> TDate = new ArrayList<String>();
     private Call<ResponseBody> inspectionCall,restaurantCall;
     private arrayAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +123,48 @@ public class MainActivity extends AppCompatActivity {
         cancelDialog = new BaseDialog(this,R.layout.dialog_cancel);
     }
 
+<<<<<<< app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.go_to_map) {
+            startActivity(new Intent(this, MapsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    class arrayAdapter extends ArrayAdapter<String> {
+
+
+        Context context;
+        String Name[];
+        String issue[];
+        String hazardC[];
+        int hazardI[];
+        String date[];
+        arrayAdapter(Context cont, ArrayList<String> name, ArrayList<String> issue, ArrayList<String> hazardC, ArrayList<Integer> hazardI, ArrayList<String> date){
+            super(cont,R.layout.customview,R.id.name,name);
+            this.context = cont;
+            this.Name = TName.toArray(new String[0]);
+            this.issue = TIssue.toArray(new String[0]);
+            this.hazardC  = THazardC.toArray(new String[0]);
+            this.hazardI = THazardI;
+            this.date = TDate.toArray(new String[0]);
+        }
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater layoutinflater =(LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = layoutinflater.inflate(R.layout.customview,parent,false);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            ImageView resIcon =  view.findViewById(R.id.image);
+=======
     private void initData(boolean force){
         inspectionManager = InspectionManager.getInstance(getApplicationContext());
 
@@ -218,10 +265,27 @@ public class MainActivity extends AppCompatActivity {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
             ImageView resIcon = view.findViewById(R.id.image);
+>>>>>>> app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
             TextView name = view.findViewById(R.id.name);
             TextView dates = view.findViewById(R.id.date);
             TextView issues = view.findViewById(R.id.issue);
             TextView hazardcolors = view.findViewById(R.id.hazardcolor);
+<<<<<<< app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+            ImageView HazardIcons =  view.findViewById(R.id.hazardicon);
+
+
+            Random random = new Random();
+            resIcon.setImageResource(images[random.nextInt(8)]);
+            name.setText(Name[position]);
+            dates.setText("Latest inspection:\n" + date[position]);
+            issues.setText("# of issues found: " + issue[position]);
+            if(hazardC[position].equals("Low")){
+                HazardIcons.setImageResource(hazardI[0]);
+            }else if (hazardC[position].equals("Moderate")){
+                HazardIcons.setImageResource(hazardI[1]);
+            }else if(hazardC[position].equals("High")){
+                HazardIcons.setImageResource(hazardI[2]);
+=======
             ImageView HazardIcons = view.findViewById(R.id.hazardicon);
 
             resIcon.setImageResource(images[position % 4]);
@@ -235,12 +299,15 @@ public class MainActivity extends AppCompatActivity {
                 HazardIcons.setImageResource(THazardI[1]);
             } else if (THazardC.get(position).equals("High")) {
                 HazardIcons.setImageResource(THazardI[2]);
+>>>>>>> app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
             }
 
             return view;
         }
     }//arrayAdapter
 
+<<<<<<< app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
+=======
     //get updated data
     private void confirmUpdate() {
         //restaurant data
@@ -471,4 +538,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+>>>>>>> app/src/main/java/com/example/cmpt276group05/ui/MainActivity.java
 }//class
