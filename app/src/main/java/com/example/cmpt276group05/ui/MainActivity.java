@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private BaseDialog loadDialog, updateDialog,cancelDialog;
     public static final String TAG = MainActivity.class.getName();
     int images[] = {R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four};
+    int presetimages[] = {R.mipmap.aw,R.mipmap.fi,R.mipmap.fs,R.mipmap.bp,R.mipmap.se,R.mipmap.bc,R.mipmap.juice,R.mipmap.bs,R.mipmap.dq,R.mipmap.panago};
+    //0 is A & W  1 is Freshii 2 is  FreshSlice 3 is boston pizza 4 is seven eleven  5 is Blenz Coffee  6 is booster Juice  7 Browns Socialhouse    8 Dairy Queen  9 Panago
     ArrayList<String> TName = new ArrayList<String>();
     ArrayList<String> TIssue = new ArrayList<String>();
     ArrayList<String> THazardC = new ArrayList<String>();
@@ -162,7 +164,31 @@ public class MainActivity extends AppCompatActivity {
             TextView hazardcolors = view.findViewById(R.id.hazardcolor);
             ImageView HazardIcons = view.findViewById(R.id.hazardicon);
 
-            resIcon.setImageResource(images[position % 4]);
+            resIcon.setImageResource(images[position%4]);
+            if(TName.get(position).contains("Boston")){
+                //0 is A & W     1 is Freshii     2 is  FreshSlice     3 is boston pizza      4 is seven eleven   5 is Blenz Coffee     6 is booster Juice   7 Browns Socialhouse   8 Dairy Queen    9 Panago
+                resIcon.setImageResource(presetimages[3]);
+            }else if (TName.get(position).contains("Eleven")){
+                resIcon.setImageResource(presetimages[4]);
+            }else if (TName.get(position).contains("A&W")){
+                resIcon.setImageResource(presetimages[0]);
+            }else if (TName.get(position).contains("Freshii")){
+                resIcon.setImageResource(presetimages[1]);
+            }else if (TName.get(position).contains("Freshslice")){
+                resIcon.setImageResource(presetimages[2]);
+            }else if (TName.get(position).contains("A & W")){
+                resIcon.setImageResource(presetimages[0]);
+            }else if (TName.get(position).contains("Blenz")){
+                resIcon.setImageResource(presetimages[5]);
+            }else if (TName.get(position).contains("Booster")){
+                resIcon.setImageResource(presetimages[6]);
+            }else if (TName.get(position).contains("Browns")){
+                resIcon.setImageResource(presetimages[7]);
+            }else if (TName.get(position).contains("Dairy")){
+                resIcon.setImageResource(presetimages[8]);
+            }else if (TName.get(position).contains("Panago")){
+                resIcon.setImageResource(presetimages[9]);
+            }
             name.setText(TName.get(position));
             dates.setText("Latest inspection:\n" + TDate.get(position));
             issues.setText("# of issues found: " + TIssue.get(position));
