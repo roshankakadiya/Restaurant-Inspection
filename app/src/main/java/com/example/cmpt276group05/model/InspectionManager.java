@@ -1,13 +1,20 @@
 package com.example.cmpt276group05.model;
 
 import android.content.Context;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.cmpt276group05.R;
+import com.example.cmpt276group05.callback.ParseFinishListener;
+import com.example.cmpt276group05.constant.BusinessConstant;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,6 +28,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /*
  * Manager for Inspection objects. Has methods for sorting and adding/ deleting inspections
@@ -31,7 +40,10 @@ public class InspectionManager implements Iterable<Inspection>{
 
     private static List<Inspection> inspectionList = new ArrayList<>();
     private static Context context;
+    private static String[] types={"Low","Moderate","High"};
     // Allows access to files
+    private ExecutorService pool = Executors.newFixedThreadPool(1);
+    private boolean isInited = false;
 
     @Override
     public Iterator<Inspection> iterator() {
@@ -48,10 +60,30 @@ public class InspectionManager implements Iterable<Inspection>{
         if (instance == null) {
             instance = new InspectionManager();
             context = ctx.getApplicationContext();
-            readInspectionData();
+        }else{
+            context = ctx.getApplicationContext();
         }
-        sortArrayList();
         return instance;
+    }
+
+    public void initData(ParseFinishListener parseFinishListener){
+        if(!isInited){
+            pool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    readInspectionData();
+                    sortArrayList();
+                    if(parseFinishListener!=null){
+                        parseFinishListener.onFinish();
+                    }
+                    isInited = true;
+                }
+            });
+        }else{
+            if(parseFinishListener!=null){
+                parseFinishListener.onFinish();
+            }
+        }
     }
 
     public static void add(Inspection inspection) {
@@ -65,12 +97,12 @@ public class InspectionManager implements Iterable<Inspection>{
 
     // Get list of inspections relating to tracking number, in most recent order
     // Assumes list is presorted
-    public static List<Inspection> getList(String trackingNumber) {
+    public List<Inspection> getList(String trackingNumber) {
         List<Inspection> listOfInspections = new ArrayList<>();
         boolean foundCluster = false;
         boolean endOfCluster = false;
         int index = 0;
-        while (!foundCluster || !endOfCluster) {
+        while ((!foundCluster || !endOfCluster) && index<inspectionList.size()) {
             if (inspectionList.get(index).getTrackingNumber().equals(trackingNumber)) {
                 listOfInspections.add(inspectionList.get(index));
                 foundCluster = true;
@@ -100,15 +132,25 @@ public class InspectionManager implements Iterable<Inspection>{
     }
 
     private static void readInspectionData() {
-        InputStream is = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, StandardCharsets.UTF_8)
-        );
-        CSVReader csvReader = new CSVReader(reader);
-
         String[] line = new String[7];
-
         try {
+
+            InputStream is=context.getResources().openRawResource(R.raw.inspectionreports_itr1);
+            File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+
+                    BusinessConstant.INSPECTION_CSV_FILE_PATH);
+            if(file.exists()){
+                try {
+                    is = new FileInputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(is, StandardCharsets.ISO_8859_1)
+            );
+            CSVReader csvReader = new CSVReader(reader);
+
             // Skip over header
             csvReader.readNext();
 
@@ -118,14 +160,31 @@ public class InspectionManager implements Iterable<Inspection>{
 
                 // Formatting with date
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.CANADA);
-                Date date = format.parse(line[1]);
-                inspection.setInspectionDate(date);
+                if(!TextUtils.isEmpty(line[1])){
+                    Date date = format.parse(line[1]);
+                    inspection.setInspectionDate(date);
+                }
 
                 inspection.setInspectionType(line[2]);
-                inspection.setNumCritViolations(Integer.parseInt(line[3]));
-                inspection.setNumNonCritViolations(Integer.parseInt(line[4]));
-                inspection.setHazardRating(line[5]);
-                inspection.setViolationReport(line[6]);
+                if(!TextUtils.isEmpty(line[3])){
+                    inspection.setNumCritViolations(Integer.parseInt(line[3]));
+                }
+
+                if(!TextUtils.isEmpty(line[4])){
+                    inspection.setNumNonCritViolations(Integer.parseInt(line[4]));
+                }
+
+                if(line[5].indexOf("Low")!=-1||line[5].indexOf("Moderate")!=-1||line[5].indexOf("High")!=-1){
+                    inspection.setHazardRating(line[5]);
+                }else{
+                    inspection.setViolationReport(line[5]);
+                }
+
+                if(line[6].indexOf("Low")!=-1||line[6].indexOf("Moderate")!=-1||line[6].indexOf("High")!=-1){
+                    inspection.setHazardRating(line[6]);
+                }else{
+                    inspection.setViolationReport(line[6]);
+                }
 
                 inspectionList.add(inspection);
 
