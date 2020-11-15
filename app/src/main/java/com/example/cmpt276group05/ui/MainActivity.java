@@ -187,4 +187,5 @@ public class MainActivity extends AppCompatActivity {
             return view;
         }
     }//arrayAdapter
+
 }//class
