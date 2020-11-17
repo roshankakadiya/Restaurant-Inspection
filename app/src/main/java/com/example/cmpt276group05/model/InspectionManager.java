@@ -213,4 +213,8 @@ public class InspectionManager implements Iterable<Inspection>{
         Inspection target = getMostRecentInspection(trackingNumber);
         return target.getNumCritViolations() + target.getNumNonCritViolations();
     }
+
+    public boolean isInited() {
+        return isInited;
+    }
 }

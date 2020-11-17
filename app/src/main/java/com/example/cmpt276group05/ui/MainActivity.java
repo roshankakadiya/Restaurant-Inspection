@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData(boolean force){
         inspectionManager = InspectionManager.getInstance(getApplicationContext());
-
+        inspectionManager.initData(null);
         restaurantManager = RestaurantManager.getInstance(getApplicationContext());
         if(force){
             restaurantManager.setInited(false);
@@ -215,6 +215,13 @@ public class MainActivity extends AppCompatActivity {
         restaurantManager.initData(new ParseFinishListener() {
             @Override
             public void onFinish() {
+                while(!inspectionManager.isInited()){
+                    try{
+                        Thread.sleep(1000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 for (int i = 0; i < restaurantManager.getNumRestaurant(); i++) {
                     Restaurant res = restaurantManager.get(i);
                     Log.d("print", String.valueOf(res));
