@@ -143,10 +143,20 @@ public class MainActivity extends AppCompatActivity {
 
     class arrayAdapter extends ArrayAdapter<String> {
         Context context;
+        String Name[];
+        String issue[];
+        String hazardC[];
+        int hazardI[];
+        String date[];
 
-        arrayAdapter(Context cont, ArrayList<String> name){
-            super(cont,R.layout.customview,R.id.name,TName);
+        arrayAdapter(Context cont, ArrayList<String> name, ArrayList<String> issue, ArrayList<String> hazardC, ArrayList<Integer> hazardI, ArrayList<String> date){
+            super(cont,R.layout.customview,R.id.name,name);
             this.context = cont;
+            this.Name = TName.toArray(new String[0]);
+            this.issue = TIssue.toArray(new String[0]);
+            this.hazardC  = THazardC.toArray(new String[0]);
+            this.hazardI = THazardI;
+            this.date = TDate.toArray(new String[0]);
         }
 
         @NonNull
@@ -189,16 +199,17 @@ public class MainActivity extends AppCompatActivity {
             }else if (TName.get(position).contains("Panago")){
                 resIcon.setImageResource(presetimages[9]);
             }
-            name.setText(TName.get(position));
-            dates.setText("Latest inspection:\n" + TDate.get(position));
+            name.setText(Name[position]);
+            dates.setText("Latest inspection:\n" + date[position]);
             issues.setText("# of issues found: " + TIssue.get(position));
 
-            if (THazardC.get(position).equals("Low")) {
-                HazardIcons.setImageResource(THazardI[0]);
-            } else if (THazardC.get(position).equals("Moderate")) {
-                HazardIcons.setImageResource(THazardI[1]);
-            } else if (THazardC.get(position).equals("High")) {
-                HazardIcons.setImageResource(THazardI[2]);
+
+            if(hazardC[position].equals("Low")){
+                HazardIcons.setImageResource(hazardI[0]);
+            }else if (hazardC[position].equals("Moderate")){
+                HazardIcons.setImageResource(hazardI[1]);
+            }else if(hazardC[position].equals("High")){
+                HazardIcons.setImageResource(hazardI[2]);
             }
 
             return view;
