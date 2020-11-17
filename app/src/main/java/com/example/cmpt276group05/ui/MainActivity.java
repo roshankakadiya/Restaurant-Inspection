@@ -193,14 +193,18 @@ public class MainActivity extends AppCompatActivity {
             dates.setText("Latest inspection:\n" + TDate.get(position));
             issues.setText("# of issues found: " + TIssue.get(position));
 
-            if (THazardC.get(position).equals("Low")) {
-                HazardIcons.setImageResource(THazardI[0]);
-            } else if (THazardC.get(position).equals("Moderate")) {
-                HazardIcons.setImageResource(THazardI[1]);
-            } else if (THazardC.get(position).equals("High")) {
-                HazardIcons.setImageResource(THazardI[2]);
-            }
 
+            try{
+                if (THazardC.get(position).equals("Low")) {
+                    HazardIcons.setImageResource(THazardI[0]);
+                } else if (THazardC.get(position).equals("Moderate")) {
+                    HazardIcons.setImageResource(THazardI[1]);
+                } else if (THazardC.get(position).equals("High")) {
+                    HazardIcons.setImageResource(THazardI[2]);
+                }
+            }catch (Exception e){
+                HazardIcons.setImageResource(THazardI[0]);
+            }
             return view;
         }
     }//arrayAdapter
@@ -224,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 for (int i = 0; i < restaurantManager.getNumRestaurant(); i++) {
                     Restaurant res = restaurantManager.get(i);
-                    Log.d("print", String.valueOf(res));
+//                    Log.d("print", String.valueOf(res));
                     Inspection ins = inspectionManager.getMostRecentInspection(res.getTrackingNumber());
-                    Log.d("Print", String.valueOf(ins));
+//                    Log.d("Print", String.valueOf(ins));
                     TName.add(res.getName());
                     // In case no inspections exist yet
                     try {
