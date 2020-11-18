@@ -6,6 +6,7 @@
 
 package com.example.cmpt276group05.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -93,7 +94,21 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initData(false);
         showUpdateDialog();
+
     }//onCreate
+
+    /**
+     * Called when the activity has detected the user's press of the back
+     * key. The {@link #getOnBackPressedDispatcher() OnBackPressedDispatcher} will be given a
+     * chance to handle the back button before the default behavior of
+     * {@link Activity#onBackPressed()} is invoked.
+     *
+     * @see #getOnBackPressedDispatcher()
+     */
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
 
     private void initView() {
         Toolbar toolbar = findViewById(R.id.toolbar);
