@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * className: SPUtils
  * description:
+ * shared preferences tools
  */
 public class SPUtils {
 
@@ -29,7 +30,7 @@ public class SPUtils {
 
 
     public static void putBean(Context context, String fileName, String key, Object obj) {
-        if (obj instanceof Serializable) {// obj必须实现Serializable接口，否则会出问题
+        if (obj instanceof Serializable) {
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -164,7 +165,6 @@ public class SPUtils {
         private static final Method sApplyMethod = findApplyMethod();
 
         /**
-         * 反射查找apply的方法
          *
          * @return
          */

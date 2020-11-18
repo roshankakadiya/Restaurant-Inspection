@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,17 +19,31 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.adapter.CustomInfoWindowAdapter;
+import com.example.cmpt276group05.callback.DownloadListener;
+import com.example.cmpt276group05.callback.ParseFinishListener;
+import com.example.cmpt276group05.constant.BusinessConstant;
 import com.example.cmpt276group05.model.Inspection;
+import com.example.cmpt276group05.model.InspectionEntry;
 import com.example.cmpt276group05.model.InspectionManager;
 import com.example.cmpt276group05.model.Restaurant;
+import com.example.cmpt276group05.model.RestaurantEntry;
 import com.example.cmpt276group05.model.RestaurantManager;
+import com.example.cmpt276group05.net.ApiService;
+import com.example.cmpt276group05.net.RetrofitManager;
+import com.example.cmpt276group05.utils.FileUtils;
+import com.example.cmpt276group05.utils.SPUtils;
+import com.example.cmpt276group05.widget.BaseDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,14 +58,30 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Interceptor;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /*
  * UI for mapsActivity
  */
-
+//show update dialog
+//show downloading dialog
+//show downloading cancel dialog
+//get json data from API
+//get CSV files by stream
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -68,6 +99,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mLocation;
+    private BaseDialog loadDialog, updateDialog,cancelDialog;
+    private Call<ResponseBody> inspectionCall,restaurantCall;
+    public static final String TAG = MapsActivity.class.getName();
 
     @Override
     public void onBackPressed() {
@@ -86,6 +120,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         inspectionManager = InspectionManager.getInstance(getApplicationContext());
 
         getLocationPermission();
+
+        initData(false);
+        initView();
+        showUpdateDialog();
     }
 
     @Override
@@ -128,6 +166,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 initMap();
             }
         }
+    }
+
+    //init dialog
+    private void initView(){
+        loadDialog = new BaseDialog(this, R.layout.dialog_loading);
+        updateDialog = new BaseDialog(this, R.layout.dialog_confirm_update);
+        cancelDialog = new BaseDialog(this,R.layout.dialog_cancel);
+    }
+    //init restaurant & inspection data
+    private void initData(boolean force){
+        inspectionManager = InspectionManager.getInstance(getApplicationContext());
+        restaurantManager = RestaurantManager.getInstance(getApplicationContext());
+        if(force){
+            inspectionManager.setInited(false);
+            restaurantManager.setInited(false);
+        }
+
+        inspectionManager.initData(null);
+        restaurantManager.initData(new ParseFinishListener() {
+            @Override
+            public void onFinish() {
+                while(!inspectionManager.isInited()){
+                    try{
+                        Thread.sleep(1000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mMap!=null){
+                            populateMarkers();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -276,6 +353,287 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    //add dialog event
+    private void initUpdateDialogEvent(){
+        updateDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateDialog.dismiss();
+            }
+        });
+
+        updateDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmUpdate();
+                updateDialog.dismiss();
+            }
+        });
+
+        loadDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    cancelDialog.show();
+                    initCancelDialogEvent();
+                }
+                return false;
+            }
+        });
+    }
+
+    //init cancel Dialog event
+    private void initCancelDialogEvent() {
+        cancelDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelDialog.dismiss();
+            }
+        });
+
+        cancelDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelUpdate();
+                cancelDialog.dismiss();
+            }
+        });
+    }
+
+
+    //get updated data
+    private void confirmUpdate(){
+        //restaurant data
+        final Retrofit retrofit = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
+        Call<RestaurantEntry> call = retrofit.create(ApiService.class).getData(BusinessConstant.API_RESTAURANT);
+        call.enqueue(new Callback<RestaurantEntry>() {
+            @Override
+            public void onResponse(Call<RestaurantEntry> call, Response<RestaurantEntry> response) {
+                if (response.body().getResult().getResources() != null && response.body().getResult().getResources().size() > 0) {
+                    try {
+                        String lastUpdateStr = SPUtils.get(MapsActivity.this, BusinessConstant.RESTAURANT_UPDATE_DATE, "");
+                        String modifyDateStr = response.body().getResult().getMetadata_modified();
+                        if (TextUtils.isEmpty(lastUpdateStr)) {//never update yet
+                            getRestaurantData(response);
+                        } else {
+                            LocalDateTime modify = LocalDateTime.parse(modifyDateStr);
+                            LocalDateTime lastUpdate = LocalDateTime.parse(lastUpdateStr);
+                            if (modify.toInstant(ZoneOffset.of("+8")).toEpochMilli() >
+                                    lastUpdate.toInstant(ZoneOffset.of("+8")).toEpochMilli()) {
+                                getRestaurantData(response);
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantEntry> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /*
+     * show update dialog
+     * */
+    private void showUpdateDialog() {
+        if (SPUtils.contains(MapsActivity.this, BusinessConstant.UPDATE_TIME)) {
+            long lastUpdateTime = SPUtils.get(MapsActivity.this, BusinessConstant.UPDATE_TIME, 0L);
+            if (System.currentTimeMillis() - lastUpdateTime > BusinessConstant.UPDATE_INTEVAL) {
+                updateDialog.show();
+                initUpdateDialogEvent();
+            }
+        } else {
+            updateDialog.show();
+            initUpdateDialogEvent();
+        }
+    }
+
+
+    /*
+     * get restaurant csv file
+     * */
+    private void getRestaurantData(Response<RestaurantEntry> restaurantEntryResponse) {
+        //restaurant data
+        if (restaurantEntryResponse.body().getResult().getResources() != null && restaurantEntryResponse.body().getResult().getResources().size() > 0) {
+            //get csv file
+            for (RestaurantEntry.ResultBean.ResourcesBean resourcesBean : restaurantEntryResponse.body().getResult().getResources()) {
+                if (resourcesBean.getFormat().equals(BusinessConstant.CSV_FORMAT)) {
+                    String url = resourcesBean.getUrl();
+                    Log.i(TAG, url);
+
+                    Retrofit retrofit1 = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadDialog.show();
+                            loadDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    cancelDialog.show();
+                                    initCancelDialogEvent();
+                                }
+                            });
+                        }
+                    });
+
+                    int start = url.indexOf(BusinessConstant.DATA_SET);
+                    if (start != -1) {
+                        String param = url.substring(start);
+                        restaurantCall = retrofit1.create(ApiService.class).download(param);
+                        restaurantCall.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                FileUtils.generateCsvFileFromStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_TEMP_FILE_PATH,
+                                        response.body().byteStream(), response.body().contentLength(),
+                                        new DownloadListener() {
+                                            @Override
+                                            public void onStart() {
+
+
+                                            }
+
+                                            @Override
+                                            public void onProgress(int progress) {
+
+                                            }
+
+                                            @Override
+                                            public void onFinish(String path) {
+                                                getInspectionData(restaurantEntryResponse);
+                                            }
+
+                                            @Override
+                                            public void onFail(String errorInfo) {
+                                                loadDialog.dismiss();
+                                                Toast.makeText(MapsActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                loadDialog.dismiss();
+                                Toast.makeText(MapsActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    //get inspection csv data
+    private void getInspectionData(Response<RestaurantEntry> restaurantEntryResponse) {
+        final Retrofit retrofit = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
+        //inspection data
+        Call<InspectionEntry> call = retrofit.create(ApiService.class).getInspectionData(BusinessConstant.API_INSPECTION);
+        call.enqueue(new Callback<InspectionEntry>() {
+            @Override
+            public void onResponse(Call<InspectionEntry> call, Response<InspectionEntry> response) {
+                if (response.body().getResult().getResources() != null && response.body().getResult().getResources().size() > 0) {
+                    //get csv file
+                    for (InspectionEntry.ResultBean.ResourcesBean resourcesBean : response.body().getResult().getResources()) {
+                        if (resourcesBean.getFormat().equals(BusinessConstant.CSV_FORMAT)) {
+                            String url = resourcesBean.getUrl();
+                            Log.i(TAG, url);
+
+                            Retrofit retrofit1 = RetrofitManager.getIntance(BusinessConstant.GET_BASE_URL);
+
+                            int start = url.indexOf(BusinessConstant.DATA_SET);
+                            if (start != -1) {
+                                String param = url.substring(start);
+                                inspectionCall = retrofit1.create(ApiService.class).download(param);
+                                inspectionCall.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        FileUtils.generateCsvFileFromStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.INSPECTION_CSV_TEMP_FILE_PATH,
+                                                response.body().byteStream(), response.body().contentLength(),
+                                                new DownloadListener() {
+                                                    @Override
+                                                    public void onStart() {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onProgress(int progress) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onFinish(String path) {
+                                                        loadDialog.dismiss();
+
+                                                        SPUtils.put(MapsActivity.this, BusinessConstant.UPDATE_TIME,System.currentTimeMillis());
+                                                        SPUtils.put(MapsActivity.this, BusinessConstant.RESTAURANT_UPDATE_DATE,
+                                                                restaurantEntryResponse.body().getResult().getMetadata_modified());
+                                                        //rename temp csv to real csv
+                                                        if(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.INSPECTION_CSV_FILE_PATH).exists()){
+                                                            new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.INSPECTION_CSV_FILE_PATH).delete();
+                                                        }
+
+                                                        new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.INSPECTION_CSV_TEMP_FILE_PATH).renameTo(
+                                                                new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.INSPECTION_CSV_FILE_PATH));
+
+                                                        if(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_FILE_PATH).exists()){
+                                                            new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_FILE_PATH).delete();
+                                                        }
+
+                                                        new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_TEMP_FILE_PATH).renameTo(
+                                                                new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + BusinessConstant.RESTAURANT_CSV_FILE_PATH));
+
+                                                        initData(true);
+
+                                                    }
+
+                                                    @Override
+                                                    public void onFail(String errorInfo) {
+                                                        Toast.makeText(MapsActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        loadDialog.dismiss();
+                                        Toast.makeText(MapsActivity.this,R.string.data_load_fail,Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InspectionEntry> call, Throwable t) {
+                loadDialog.dismiss();
+            }
+        });
+    }
+
+    //cancel downloading dismiss dialog
+    private void cancelUpdate(){
+        updateDialog.dismiss();
+        restaurantCall.cancel();
+        inspectionCall.cancel();
+    }
+
+    //okHTTP log interceptor
+    class LogCatInterceptor implements Interceptor {
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
+            return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY).intercept(chain);
         }
     }
 }

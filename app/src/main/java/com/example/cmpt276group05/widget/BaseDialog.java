@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.example.cmpt276group05.R;
-
+//custom BaseDialog
 public class BaseDialog extends Dialog {
     private int layoutUri;
 

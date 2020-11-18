@@ -1,3 +1,5 @@
+//restaurant Entry
+//made automatically by jsonformat plugin
 package com.example.cmpt276group05.model;
 
 import java.util.List;

@@ -14,6 +14,8 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//RetrofitManager
+
 public class RetrofitManager {
     private static Map<String,Retrofit> retrofitMap = new HashMap<>();
 

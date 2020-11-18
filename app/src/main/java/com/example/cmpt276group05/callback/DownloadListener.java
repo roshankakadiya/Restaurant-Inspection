@@ -1,7 +1,7 @@
 package com.example.cmpt276group05.callback;
 
 /*
-* download
+* download stuff
 * */
 public interface DownloadListener {
     void onStart();//start download

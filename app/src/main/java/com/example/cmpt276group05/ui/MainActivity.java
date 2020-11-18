@@ -4,6 +4,8 @@
 //add icon for restaurant and Hazard indicators
 
 
+
+
 package com.example.cmpt276group05.ui;
 
 import android.app.Activity;
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> TDate = new ArrayList<String>();
     private Call<ResponseBody> inspectionCall,restaurantCall;
     private arrayAdapter adapter;
-
+    private boolean showDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         initData(false);
-        showUpdateDialog();
-
+        if(showDialog){
+            showUpdateDialog();
+        }
     }//onCreate
 
     /**
@@ -135,9 +138,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        loadDialog = new BaseDialog(this, R.layout.dialog_loading);
-        updateDialog = new BaseDialog(this, R.layout.dialog_confirm_update);
-        cancelDialog = new BaseDialog(this,R.layout.dialog_cancel);
+        if(showDialog){
+            loadDialog = new BaseDialog(this, R.layout.dialog_loading);
+            updateDialog = new BaseDialog(this, R.layout.dialog_confirm_update);
+            cancelDialog = new BaseDialog(this,R.layout.dialog_cancel);
+        }
+
     }
 
 

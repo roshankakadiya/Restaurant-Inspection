@@ -66,6 +66,7 @@ public class InspectionManager implements Iterable<Inspection>{
         return instance;
     }
 
+    //init data
     public void initData(ParseFinishListener parseFinishListener){
         if(!isInited){
             pool.execute(new Runnable() {
@@ -216,5 +217,9 @@ public class InspectionManager implements Iterable<Inspection>{
 
     public boolean isInited() {
         return isInited;
+    }
+
+    public void setInited(boolean inited) {
+        isInited = inited;
     }
 }
