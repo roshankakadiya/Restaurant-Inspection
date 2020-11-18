@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
@@ -61,6 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mLocation;
+    private Object MarkerItem;
 
 
     @Override
@@ -233,53 +236,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LatLng latLng = new LatLng(latitude,longitude);
                 offsetItem = new MyClusterItem(latLng, name, snippet, hazardLevelMostRecent, trackingNumber);
                 clusterManager.addItem(offsetItem);
-                Log.d("Location" , name  + " "+ address+ " : " + latLng);
-//                int resourceID = 0;
-//                switch (hazardLevelMostRecent) {
-//                    case "Low":
-//                        resourceID = R.drawable.low_bmp;
-//                        break;
-//                    case "Moderate":
-//                        resourceID = R.drawable.mid_bmp;
-//                        break;
-//                    case "High":
-//                        resourceID = R.drawable.high_bmp;
-//                        break;
-//                }
-
-//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceID);
-//                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-            // Null occurs when there is no inspection available - use a default peg instead of custom icon
-//                marker = mMap.addMarker(new MarkerOptions()
-//                        .position(new LatLng(latitude,longitude))
-//                        .title(name)
-//                        .snippet(snippet)
-//                        .icon(bitmapDescriptor));
             } catch (NullPointerException e) {
                 String hazardLevelMostRecent = "N/A";
                 snippet = address + " - No inspection found";
                 LatLng latLng = new LatLng(latitude,longitude);
                 offsetItem = new MyClusterItem(latLng, name, snippet, hazardLevelMostRecent, trackingNumber);
-                Log.d("Location" , name  + " "+ address+ " : " + latLng);
+//                Log.d("Location" , name  + " "+ address+ " : " + latLng);
                 clusterManager.addItem(offsetItem);
-//                marker = mMap.addMarker(new MarkerOptions()
-//                        .position(new LatLng(latitude,longitude))
-//                        .title(name)
-//                        .snippet(snippet));
+
             }
             clusterManager.cluster();
 
-
-
-//            markerCollection.setOnInfoWindowClickListener(marker1 -> {
-//                Log.d("tracking_number", trackingNumber);
-//                Intent intent = new Intent(MapsActivity.this, InspectionList.class);
-//                intent.putExtra("Tracking_Number", trackingNumber);
-//                startActivity(intent);
-//            });
         }
     }
-
 
 
     private void getLocationPermission(){

@@ -145,10 +145,10 @@ public class RestaurantManager implements Iterable<Restaurant>{
 
                 restaurantList.add(sample);
 
-                Log.d("Myactivity", "Just Created: " + sample);
+//                Log.d("Myactivity", "Just Created: " + sample);
             }
         } catch (IOException | CsvValidationException e) {
-            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
+//            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
             e.printStackTrace();
         }
 

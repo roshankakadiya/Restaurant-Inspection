@@ -188,10 +188,10 @@ public class InspectionManager implements Iterable<Inspection>{
 
                 inspectionList.add(inspection);
 
-                Log.d("Myactivity", "Just Created: " + inspection);
+//                Log.d("Myactivity", "Just Created: " + inspection);
             }
         } catch (IOException | CsvValidationException | ParseException e) {
-            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
+//            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
             e.printStackTrace();
         }
     }

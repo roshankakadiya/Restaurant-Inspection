@@ -28,6 +28,7 @@ public class MyClusterManagerRenderer extends DefaultClusterRenderer<MyClusterIt
     private final int markerHeight;
 
 
+
     public MyClusterManagerRenderer(Context context, GoogleMap map, ClusterManager<MyClusterItem> clusterManager) {
         super(context, map, clusterManager);
 
@@ -42,7 +43,7 @@ public class MyClusterManagerRenderer extends DefaultClusterRenderer<MyClusterIt
     }
     @Override
     protected void onBeforeClusterItemRendered(@NonNull MyClusterItem item, @NonNull MarkerOptions markerOptions) {
-        Log.d("Clusterrender",item.getHazardLevel());
+//        Log.d("Clusterrender",item.getHazardLevel());
         if (item.getHazardLevel().contains("High")) {
             imageview.setImageResource(R.drawable.high_bmp);
         } else if (item.getHazardLevel().contains("Moderate")) {
