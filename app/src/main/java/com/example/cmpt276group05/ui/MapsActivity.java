@@ -2,34 +2,27 @@ package com.example.cmpt276group05.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.cmpt276group05.R;
 import com.example.cmpt276group05.adapter.CustomInfoWindowAdapter;
-import com.example.cmpt276group05.model.Inspection;
 import com.example.cmpt276group05.model.InspectionManager;
 import com.example.cmpt276group05.model.MyClusterItem;
+import com.example.cmpt276group05.model.MyClusterManagerRenderer;
 import com.example.cmpt276group05.model.Restaurant;
 import com.example.cmpt276group05.model.RestaurantManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,12 +31,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
@@ -60,6 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RestaurantManager restaurantManager;
     private InspectionManager inspectionManager;
     private ClusterManager<MyClusterItem> clusterManager;
+    private MyClusterManagerRenderer myClusterManagerRenderer;
 
     // Src: CodingWithMitch Tutorial - https://youtu.be/Vt6H9TOmsuo
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -121,9 +111,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
             clusterManager = new ClusterManager<MyClusterItem>(this, mMap);
+            clusterManager.getMarkerCollection().setInfoWindowAdapter(new CustomInfoWindowAdapter(getApplicationContext()));
+            mMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
             mMap.setOnInfoWindowClickListener(clusterManager);
             mMap.setOnCameraIdleListener(clusterManager);
             mMap.setOnMarkerClickListener(clusterManager);
+            clusterManager.setOnClusterInfoWindowClickListener(new ClusterManager.OnClusterInfoWindowClickListener<MyClusterItem>() {
+                @Override
+                public void onClusterInfoWindowClick(Cluster<MyClusterItem> cluster) {
+
+                }
+            });
+
 //            clusterManager.setOnClusterInfoWindowClickListener(this);
 
 
@@ -201,8 +200,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void populateMarkers() {
         CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(MapsActivity.this);
-
+        MarkerManager.Collection markerCollection = clusterManager.getMarkerCollection();
+        markerCollection.setInfoWindowAdapter(customInfoWindowAdapter);
+        mMap.setInfoWindowAdapter(customInfoWindowAdapter);
+        if (myClusterManagerRenderer == null) {
+            myClusterManagerRenderer = new MyClusterManagerRenderer(getApplicationContext(), mMap, clusterManager);
+        }
+        clusterManager.setRenderer(myClusterManagerRenderer);
         for (int x = 0; x < restaurantManager.getNumRestaurant(); x++) {
+
 
             Restaurant restaurant = restaurantManager.get(x);
             String name = restaurant.getName();
@@ -211,9 +217,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             double latitude = restaurant.getLatitude();
             double longitude = restaurant.getLongitude();
 
-            MarkerManager.Collection markerCollection = clusterManager.getMarkerCollection();
-            markerCollection.setInfoWindowAdapter(customInfoWindowAdapter);
-            mMap.setInfoWindowAdapter(customInfoWindowAdapter);
+
 
             String snippet;
             Marker marker;

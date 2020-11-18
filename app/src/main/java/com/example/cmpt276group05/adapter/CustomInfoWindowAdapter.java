@@ -1,6 +1,7 @@
 package com.example.cmpt276group05.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -30,15 +31,22 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
     public void renderWindowText(Marker marker, View view) {
         String title = marker.getTitle();
         TextView tvtitle = (TextView) mWindow.findViewById(R.id.title);
+        TextView tvsnippet = (TextView) mWindow.findViewById(R.id.snippet);
         if (!title.equals("")) {
             tvtitle.setText(title);
         }
 
+        Log.d("Tester", marker.getSnippet());
         String snippet = marker.getSnippet();
-        TextView tvsnippet = (TextView) mWindow.findViewById(R.id.snippet);
-        if (!snippet.equals("")) {
-            tvsnippet.setText(snippet);
+
+        try {
+            if (!snippet.equals("")) {
+                tvsnippet.setText(snippet);
+            }
+        } catch (NullPointerException e) {
+            tvsnippet.setText("N/A");
         }
+
     }
 
     @Override

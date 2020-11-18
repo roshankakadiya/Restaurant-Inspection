@@ -98,8 +98,6 @@ public class Inspection {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMM YYYY", Locale.CANADA);
             timeInfo = dateFormat.format(inspect);
         }
-        Log.d("Test", toString());
-        Log.d("Test",String.valueOf(diffInDays));
 
         return timeInfo;
     }
