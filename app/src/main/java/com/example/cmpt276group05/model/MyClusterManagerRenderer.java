@@ -43,7 +43,6 @@ public class MyClusterManagerRenderer extends DefaultClusterRenderer<MyClusterIt
     }
     @Override
     protected void onBeforeClusterItemRendered(@NonNull MyClusterItem item, @NonNull MarkerOptions markerOptions) {
-//        Log.d("Clusterrender",item.getHazardLevel());
         if (item.getHazardLevel().contains("High")) {
             imageview.setImageResource(R.drawable.high_bmp);
         } else if (item.getHazardLevel().contains("Moderate")) {

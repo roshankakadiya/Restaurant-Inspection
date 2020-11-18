@@ -104,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
+                            != PackageManager.PERMISSION_GRANTED) {
 
                 return;
             }
@@ -119,14 +119,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setOnInfoWindowClickListener(clusterManager);
             mMap.setOnCameraIdleListener(clusterManager);
             mMap.setOnMarkerClickListener(clusterManager);
-            clusterManager.setOnClusterInfoWindowClickListener(new ClusterManager.OnClusterInfoWindowClickListener<MyClusterItem>() {
-                @Override
-                public void onClusterInfoWindowClick(Cluster<MyClusterItem> cluster) {
-
-                }
-            });
-
-//            clusterManager.setOnClusterInfoWindowClickListener(this);
 
 
             populateMarkers();
@@ -246,6 +238,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
             clusterManager.cluster();
+
 
         }
     }
