@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.example.cmpt276group05.model.Inspection;
 import com.example.cmpt276group05.model.InspectionManager;
 import com.example.cmpt276group05.model.Restaurant;
 import com.example.cmpt276group05.model.RestaurantManager;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -68,13 +70,11 @@ public class InspectionList extends AppCompatActivity {
 
         TextView displayrestaurantGpscord=(TextView) findViewById(R.id.GPScordtextview);
 
-
-//        displayrestaurantGpscord.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        displayrestaurantGpscord.setOnClickListener(v -> {
+            Intent intent1 = new Intent(getApplicationContext(), MapsActivity.class);
+            intent1.putExtra("trackingNumber", res.getTrackingNumber());
+            startActivity(intent1);
+        });
 
 
         displayrestaurantGpscord.setText(""+res.getLatitude()+" Latitude "+res.getLongitude()+" Longitude");
