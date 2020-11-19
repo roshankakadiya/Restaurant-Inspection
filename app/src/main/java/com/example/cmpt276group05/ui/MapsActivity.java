@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -96,6 +99,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final float DEFAULT_ZOOM = 12.5f;
 
     //vars
+    private Location lastLocation = null;
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mLocation;
@@ -116,6 +120,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.map_toolbar);
         setSupportActionBar(toolbar);
 
+
         restaurantManager = RestaurantManager.getInstance(getApplicationContext());
         inspectionManager = InspectionManager.getInstance(getApplicationContext());
 
@@ -124,6 +129,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         initData(false);
         initView();
         showUpdateDialog();
+
+
     }
 
     @Override
@@ -228,6 +235,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mLocation = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (mLocationPermissionsGranted) {
+                // Centers map on new location when GPS detects change in position
+                LocationListener locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        if (lastLocation == null) {
+                            lastLocation = location;
+                        }
+                        moveCamera(new LatLng(location.getLatitude(),location.getLongitude()), DEFAULT_ZOOM);
+                    }
+
+                    @Override
+                    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String s) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String s) {
+
+                    }
+                };
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,1,locationListener);
+
                 Task location = mLocation.getLastLocation();
                 location.addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

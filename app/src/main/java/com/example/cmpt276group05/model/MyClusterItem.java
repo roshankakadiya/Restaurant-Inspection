@@ -6,6 +6,10 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+/*
+ * Custom Data class for cluster manager
+ */
+
 public class MyClusterItem implements ClusterItem {
     private final LatLng position;
     private final String title;
